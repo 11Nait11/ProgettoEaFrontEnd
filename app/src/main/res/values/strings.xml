@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">ProgettoEaFrontEnd</string>
+    <string name="home">Home\n</string>
+    <string name="search">Search\n</string>
+    <string name="add">Add\n</string>
+    <string name="message">Message\n</string>
+    <string name="account">Account\n</string>
+    <string name="loading">Loading\n</string>
+    <string name="loading_failed">Failed to load</string>
 </resources>
