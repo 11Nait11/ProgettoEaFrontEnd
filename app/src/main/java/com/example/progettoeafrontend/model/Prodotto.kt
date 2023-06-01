@@ -1,4 +1,4 @@
-package com.example.progettoeafrontend.network
+package com.example.progettoeafrontend.model
 
 import kotlinx.serialization.Serializable
 

@@ -25,7 +25,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -75,7 +74,7 @@ fun screenApp() {
         ){
 
             composable(route=screenApp.Home.name){
-                Home()
+                Home(appViewModel.uiState)
             }
             composable(route=screenApp.Search.name){
                 Search()

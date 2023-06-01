@@ -5,15 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.progettoeafrontend.network.Image
 import com.example.progettoeafrontend.network.Service
-import com.example.progettoeafrontend.network.Utente
 import kotlinx.coroutines.launch
 import java.io.IOException
 
 
 sealed interface UiState {
-    data class Success (val utenti: List<Image>) : UiState
+    data class Success (val resultList: List<Any> = emptyList(), val result:Any="") : UiState
     object Error : UiState
     object Loading : UiState
 }
@@ -43,4 +41,6 @@ class AppViewModel : ViewModel(){
             } catch (e: IOException) { UiState.Error }
         }
     }
+
+
 }

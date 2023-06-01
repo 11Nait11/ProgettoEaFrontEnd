@@ -7,4 +7,6 @@
     <string name="account">Account\n</string>
     <string name="loading">Loading\n</string>
     <string name="loading_failed">Failed to load</string>
+    <string name="prodotto">Prodotto\n</string>
+    <string name="img_prodotto">Immage Prodotto\n</string>
 </resources>
