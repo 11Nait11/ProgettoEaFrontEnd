@@ -1,12 +1,19 @@
 package com.example.progettoeafrontend.ui
 
+
 import android.util.Base64
+import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,30 +22,44 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.TextField
+
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.progettoeafrontend.AppViewModel
 import com.example.progettoeafrontend.R
-import com.example.progettoeafrontend.UiState
+
+import com.example.progettoeafrontend.UiStateImage
 import com.example.progettoeafrontend.model.Image
 import com.example.progettoeafrontend.screenApp
-import com.example.progettoeafrontend.ui.theme.ProgettoEaFrontEndTheme
+
 
 @Composable
-fun Home(uiState:UiState,
-         modifier: Modifier = Modifier){
+fun Home(uiState:UiStateImage, navController : NavController,
+         viewModel: AppViewModel,
+         modifier: Modifier = Modifier,
+
+         ){
+    Log.d("pippo","chiamo con stato in Home : ${uiState.toString()}")
+//    if(uiState !is UiState.Success)
+//        viewModel.getImages()
 
     when(uiState){
-        is UiState.Loading -> LoadingScreen(modifier)
-        is UiState.Success -> ResultScreen(uiState.resultList as List<Image>, modifier)
-        is UiState.Error -> ErrorScreen(modifier)
+        is UiStateImage.Loading -> LoadingScreen(modifier)
+        is UiStateImage.Success -> ResultScreen(uiState.resultList as List<Image>, modifier,navController, viewModel )
+        is UiStateImage.Error -> ErrorScreen(modifier)
     }
 
 }
 
 @Composable
-fun LoadingScreen(modifier: Modifier = Modifier) {
+fun  LoadingScreen(modifier: Modifier = Modifier) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier.fillMaxSize()
@@ -48,18 +69,22 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
             painter = painterResource(R.drawable.loading_img),
             contentDescription = stringResource(R.string.loading)
         )
+
     }
 }
 
+
+
 @Composable
-fun ResultScreen(uiState: List<Image>, modifier: Modifier = Modifier) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier.fillMaxSize()
+fun ResultScreen(photos: List<Image>, modifier: Modifier = Modifier, navController : NavController,viewModel: AppViewModel) {
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(150.dp),
+        modifier = modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(4.dp)
     ) {
-        LazyColumn() {
-            items(uiState) { image ->
-                photoCard(photo64 = image.image)
+        items(items = photos, key = { photo -> photo.id }) { photo ->
+            Box(modifier = modifier.clickable { clickProduct(navController,viewModel,photo.prodottoId) }) {
+                photoCard(photo64 = photo)
             }
         }
     }
@@ -78,19 +103,35 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 
 
 @Composable
-fun photoCard(photo64: String, modifier: Modifier = Modifier) {
-
-    val imageData: ByteArray = Base64.decode(photo64, Base64.DEFAULT)
-    AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(imageData)
-            .crossfade(true)
-            .build(),
-        error = painterResource(R.drawable.ic_broken_image),
-        placeholder = painterResource(R.drawable.loading_img),
-        contentDescription = stringResource(id = R.string.img_prodotto) ,
-        contentScale = ContentScale.FillBounds
-    )
-    Text(text = "--------------------------------------------------------------------")
+fun photoCard(photo64: Image, modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier
+            .padding(4.dp)
+            .fillMaxWidth()
+            .aspectRatio(1f),
+        elevation = CardDefaults.cardElevation(8.dp),
+    ) {
+        val imageData: ByteArray = Base64.decode(photo64.image, Base64.DEFAULT)
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(imageData)
+                .crossfade(true)
+                .build(),
+            error = painterResource(R.drawable.ic_broken_image),
+            placeholder = painterResource(R.drawable.loading_img),
+            contentDescription = stringResource(id = R.string.img_prodotto),
+            contentScale = ContentScale.FillBounds
+        )
+    }
+    Text(text =photo64.id.toString() )
+    Text(text =photo64.id.toString() )
 }
 
+
+
+fun clickProduct(navController : NavController,viewModel: AppViewModel,id:Long){
+    viewModel.getProdotto(prodottoId = id)
+    Log.d("pippo","eseguo nav + ottengo prodotto: ${id}")
+    navController.navigate(screenApp.ProductDetail.name)
+
+}

@@ -20,12 +20,11 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.progettoeafrontend.R
-import com.example.progettoeafrontend.UiState
+
 import com.example.progettoeafrontend.model.Image
 
 @Composable
-fun Account(uiState:UiState,
-            modifier: Modifier = Modifier) {
+fun Account() {
     Text(text = "Account sono io")
 
 }

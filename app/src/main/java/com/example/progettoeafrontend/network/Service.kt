@@ -2,13 +2,14 @@ package com.example.progettoeafrontend.network
 
 
 import com.example.progettoeafrontend.model.Image
-import com.example.progettoeafrontend.model.Utente
+import com.example.progettoeafrontend.model.Product
+import com.example.progettoeafrontend.model.User
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 private const val BASE_URL =
     "http://192.168.1.6:8080/"
@@ -21,10 +22,13 @@ private val retrofit = Retrofit.Builder()
 interface AppService{
 
     @GET("utente-api/utenti")
-    suspend fun getUtenti():List<Utente>
+    suspend fun getUtenti():List<User>
 
     @GET("image-api/images")
     suspend fun getImages():List<Image>
+
+    @GET("prodotto-api/prodotti/{idProdotto}")
+    suspend fun getProduct(@Path("idProdotto") idProdotto: Long): Product
 
 
 }

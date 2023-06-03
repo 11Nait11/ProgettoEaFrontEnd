@@ -33,7 +33,9 @@ import com.example.progettoeafrontend.ui.Account
 import com.example.progettoeafrontend.ui.Add
 import com.example.progettoeafrontend.ui.Home
 import com.example.progettoeafrontend.ui.Message
+import com.example.progettoeafrontend.ui.ProductDetail
 import com.example.progettoeafrontend.ui.Search
+
 import com.example.progettoeafrontend.ui.theme.ProgettoEaFrontEndTheme
 
 
@@ -43,6 +45,7 @@ enum class screenApp(@StringRes val title:Int){
     Add(title = R.string.add),
     Message(title = R.string.message),
     Account(title = R.string.account),
+    ProductDetail(title = R.string.productDetail)
 }
 
 
@@ -74,8 +77,9 @@ fun screenApp() {
         ){
 
             composable(route=screenApp.Home.name){
-                Home(appViewModel.uiState)
+                Home(appViewModel.uiStateImage,navController, appViewModel)
             }
+
             composable(route=screenApp.Search.name){
                 Search()
             }
@@ -84,9 +88,14 @@ fun screenApp() {
             }
             composable(route=screenApp.Message.name){
                 Message()
+
+
             }
             composable(route=screenApp.Account.name){
-                Account(appViewModel.uiState)
+                Account()
+            }
+            composable(route= screenApp.ProductDetail.name){
+                ProductDetail(appViewModel.uiStateProd,navController, appViewModel)
             }
         }
 

@@ -9,4 +9,5 @@
     <string name="loading_failed">Failed to load</string>
     <string name="prodotto">Prodotto\n</string>
     <string name="img_prodotto">Immage Prodotto\n</string>
+    <string name="productDetail">dettagli prodotto</string>
 </resources>

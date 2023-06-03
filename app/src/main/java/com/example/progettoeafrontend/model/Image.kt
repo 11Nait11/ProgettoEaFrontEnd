@@ -4,4 +4,4 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class Image(val image: String)
+data class Image(val id:Long,val image: String, val prodottoId:Long)
