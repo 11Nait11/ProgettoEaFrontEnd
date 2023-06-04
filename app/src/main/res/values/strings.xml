@@ -10,4 +10,8 @@
     <string name="prodotto">Prodotto\n</string>
     <string name="img_prodotto">Immage Prodotto\n</string>
     <string name="productDetail">dettagli prodotto</string>
+    <string name="cart">icona carrello</string>
+    <string name="acquista">Acquista ora</string>
+    <string name="pagamentoOK">"Congratulazioni"</string>
+    <string name="pagamentoKO">Errore di pagamento</string>
 </resources>

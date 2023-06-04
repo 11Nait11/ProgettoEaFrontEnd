@@ -39,7 +39,7 @@ import com.example.progettoeafrontend.ui.Search
 import com.example.progettoeafrontend.ui.theme.ProgettoEaFrontEndTheme
 
 
-enum class screenApp(@StringRes val title:Int){
+enum class ScreenApp(@StringRes val title:Int){
     Home(title = R.string.home),
     Search(title = R.string.search),
     Add(title = R.string.add),
@@ -60,11 +60,11 @@ fun screenApp() {
             Row(Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
                )  {
-                iconButton(icon = Icons.Filled.Home, onClick = {navController.navigate(screenApp.Home.name)}, R.string.home)
-                iconButton(icon = Icons.Filled.Search, onClick = {navController.navigate(screenApp.Search.name)}, R.string.search)
-                iconButton(icon = Icons.Filled.Add, onClick = {navController.navigate(screenApp.Add.name)}, R.string.add)
-                iconButton(icon = Icons.Filled.Email, onClick = {navController.navigate(screenApp.Message.name)}, R.string.message)
-                iconButton(icon = Icons.Filled.AccountBox, onClick = {navController.navigate(screenApp.Account.name)}, R.string.account)
+                iconButton(icon = Icons.Filled.Home, onClick = {navController.navigate(ScreenApp.Home.name)}, R.string.home)
+                iconButton(icon = Icons.Filled.Search, onClick = {navController.navigate(ScreenApp.Search.name)}, R.string.search)
+                iconButton(icon = Icons.Filled.Add, onClick = {navController.navigate(ScreenApp.Add.name)}, R.string.add)
+                iconButton(icon = Icons.Filled.Email, onClick = {navController.navigate(ScreenApp.Message.name)}, R.string.message)
+                iconButton(icon = Icons.Filled.AccountBox, onClick = {navController.navigate(ScreenApp.Account.name)}, R.string.account)
             }
 
 
@@ -72,29 +72,29 @@ fun screenApp() {
     ) {innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = screenApp.Home.name,
+            startDestination = ScreenApp.Home.name,
             modifier = Modifier.padding(innerPadding),
         ){
 
-            composable(route=screenApp.Home.name){
+            composable(route=ScreenApp.Home.name){
                 Home(appViewModel.uiStateImage,navController, appViewModel)
             }
 
-            composable(route=screenApp.Search.name){
+            composable(route=ScreenApp.Search.name){
                 Search()
             }
-            composable(route=screenApp.Add.name){
+            composable(route=ScreenApp.Add.name){
                 Add()
             }
-            composable(route=screenApp.Message.name){
+            composable(route=ScreenApp.Message.name){
                 Message()
 
 
             }
-            composable(route=screenApp.Account.name){
+            composable(route=ScreenApp.Account.name){
                 Account()
             }
-            composable(route= screenApp.ProductDetail.name){
+            composable(route= ScreenApp.ProductDetail.name){
                 ProductDetail(appViewModel.uiStateProd,navController, appViewModel)
             }
         }

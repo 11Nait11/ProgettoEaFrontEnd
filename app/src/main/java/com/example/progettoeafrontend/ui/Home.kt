@@ -25,11 +25,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.TextField
 
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.progettoeafrontend.AppViewModel
@@ -37,7 +35,7 @@ import com.example.progettoeafrontend.R
 
 import com.example.progettoeafrontend.UiStateImage
 import com.example.progettoeafrontend.model.Image
-import com.example.progettoeafrontend.screenApp
+import com.example.progettoeafrontend.ScreenApp
 
 
 @Composable
@@ -132,6 +130,6 @@ fun photoCard(photo64: Image, modifier: Modifier = Modifier) {
 fun clickProduct(navController : NavController,viewModel: AppViewModel,id:Long){
     viewModel.getProdotto(prodottoId = id)
     Log.d("pippo","eseguo nav + ottengo prodotto: ${id}")
-    navController.navigate(screenApp.ProductDetail.name)
+    navController.navigate(ScreenApp.ProductDetail.name)
 
 }
