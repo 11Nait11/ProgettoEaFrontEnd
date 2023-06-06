@@ -2,7 +2,6 @@ package com.example.progettoeafrontend.ui
 
 
 import android.util.Base64
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -33,25 +32,24 @@ import coil.request.ImageRequest
 import com.example.progettoeafrontend.AppViewModel
 import com.example.progettoeafrontend.R
 
-import com.example.progettoeafrontend.UiStateImage
+import com.example.progettoeafrontend.UiStateProduct
 import com.example.progettoeafrontend.model.Image
 import com.example.progettoeafrontend.ScreenApp
 
 
 @Composable
-fun Home(uiState:UiStateImage, navController : NavController,
+fun Home(uiState:UiStateProduct, navController : NavController,
          viewModel: AppViewModel,
          modifier: Modifier = Modifier,
 
          ){
-    Log.d("pippo","chiamo con stato in Home : ${uiState.toString()}")
-//    if(uiState !is UiState.Success)
-//        viewModel.getImages()
 
+    if(uiState==UiStateProduct.Loading) // todo: or lista vuota
+        viewModel.getImages()
     when(uiState){
-        is UiStateImage.Loading -> LoadingScreen(modifier)
-        is UiStateImage.Success -> ResultScreen(uiState.resultList as List<Image>, modifier,navController, viewModel )
-        is UiStateImage.Error -> ErrorScreen(modifier)
+        is UiStateProduct.Loading -> LoadingScreen(modifier)
+        is UiStateProduct.Success -> ResultScreen(uiState.resultList as List<Image>, modifier,navController, viewModel )
+        is UiStateProduct.Error -> ErrorScreen(modifier)
     }
 
 }
@@ -72,7 +70,6 @@ fun  LoadingScreen(modifier: Modifier = Modifier) {
 }
 
 
-
 @Composable
 fun ResultScreen(photos: List<Image>, modifier: Modifier = Modifier, navController : NavController,viewModel: AppViewModel) {
     LazyVerticalGrid(
@@ -81,7 +78,9 @@ fun ResultScreen(photos: List<Image>, modifier: Modifier = Modifier, navControll
         contentPadding = PaddingValues(4.dp)
     ) {
         items(items = photos, key = { photo -> photo.id }) { photo ->
-            Box(modifier = modifier.clickable { clickProduct(navController,viewModel,photo.prodottoId) }) {
+            Box(
+                modifier = modifier.clickable { clickProduct(navController, viewModel, photo.prodottoId) })
+            {
                 photoCard(photo64 = photo)
             }
         }
@@ -98,7 +97,6 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
         Text(stringResource(R.string.loading_failed))
     }
 }
-
 
 @Composable
 fun photoCard(photo64: Image, modifier: Modifier = Modifier) {
@@ -125,11 +123,8 @@ fun photoCard(photo64: Image, modifier: Modifier = Modifier) {
     Text(text =photo64.id.toString() )
 }
 
-
-
 fun clickProduct(navController : NavController,viewModel: AppViewModel,id:Long){
-    viewModel.getProdotto(prodottoId = id)
-    Log.d("pippo","eseguo nav + ottengo prodotto: ${id}")
+    viewModel.getProductDetail(prodottoId = id)
     navController.navigate(ScreenApp.ProductDetail.name)
 
 }

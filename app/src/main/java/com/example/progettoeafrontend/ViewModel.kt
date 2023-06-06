@@ -1,16 +1,9 @@
 package com.example.progettoeafrontend
 
-import android.app.Activity
 import android.util.Log
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.progettoeafrontend.network.Service
@@ -20,26 +13,25 @@ import java.io.IOException
 
 
 
-sealed interface UiStateImage {
-    data class Success (val resultList: List<Any>,) : UiStateImage
-    object Error : UiStateImage
-    object Loading : UiStateImage
+sealed interface UiStateProduct {
+    data class Success (val resultList: List<Any>,) : UiStateProduct
+    object Error : UiStateProduct
+    object Loading : UiStateProduct
 }
-sealed interface UiStateProd {
-    data class Success (val result: Any) : UiStateProd
-    object Error : UiStateProd
-    object Loading : UiStateProd
+sealed interface UiStateProductDetail {
+    data class Success (val result: Any) : UiStateProductDetail
+    object Error : UiStateProductDetail
+    object Loading : UiStateProductDetail
 }
 
 class AppViewModel : ViewModel(){
 
-    var uiStateImage: UiStateImage by mutableStateOf(UiStateImage.Loading)
+    var uiStateProduct: UiStateProduct by mutableStateOf(UiStateProduct.Loading)
         private set
-    var uiStateProd: UiStateProd by mutableStateOf(UiStateProd.Loading)
+    var uiStateProductDetail: UiStateProductDetail by mutableStateOf(UiStateProductDetail.Loading)
         private set
 
     init {
-        getImages()
 
     }
 
@@ -48,32 +40,38 @@ class AppViewModel : ViewModel(){
 //    avvio operaz. asyn per getImages()
         viewModelScope.launch {
             Log.d("Pippo","getimages")
-            uiStateImage = try {
+            uiStateProduct = try {
                 Log.d("Pippo","entroImage")
                 val listResult = Service.retrofitService.getImages()
                 Log.d("Pippo","ottengoImage")
-                UiStateImage.Success(resultList = listResult)
-            } catch (e: IOException) { UiStateImage.Error }
+                UiStateProduct.Success(resultList = listResult)
+            } catch (e: IOException) { UiStateProduct.Error }
         }
     }
 
-    fun getProdotto(prodottoId:Long){
-        uiStateProd=UiStateProd.Loading
+    fun getProductDetail(prodottoId:Long){
+//        gestire diversamente ?
+        uiStateProductDetail=UiStateProductDetail.Loading
         viewModelScope.launch {
             Log.d("Pippo","getProd")
-            uiStateProd = try {
+            uiStateProductDetail = try {
                 Log.d("Pippo","entroPRdo")
                 val result = Service.retrofitService.getProduct(prodottoId)
                 Log.d("Pippo","ottengoProd")
-                UiStateProd.Success(result= result)
-            } catch (e: IOException) { UiStateProd.Error }
+                UiStateProductDetail.Success(result= result)
+            } catch (e: IOException) { UiStateProductDetail.Error }
         }
 
     }
 
-    fun deleteProductFromDb(idProd: Long) {
-        Log.d("Pippo","chiamo Prodotto ${idProd}")
-
+    fun deleteProduct(idProd: Long) {
+            viewModelScope.launch {
+                uiStateProduct = try {
+                    Service.retrofitService.deleteProduct(idProd)
+                    UiStateProduct.Loading
+                } catch (e: IOException) { UiStateProduct.Error }
+            }
+        Log.d("DELETE", "Porodotto Cancellato " +idProd)
     }
 
 

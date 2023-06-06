@@ -77,7 +77,8 @@ fun screenApp() {
         ){
 
             composable(route=ScreenApp.Home.name){
-                Home(appViewModel.uiStateImage,navController, appViewModel)
+
+                Home(appViewModel.uiStateProduct,navController, appViewModel)
             }
 
             composable(route=ScreenApp.Search.name){
@@ -95,7 +96,7 @@ fun screenApp() {
                 Account()
             }
             composable(route= ScreenApp.ProductDetail.name){
-                ProductDetail(appViewModel.uiStateProd,navController, appViewModel)
+                ProductDetail(appViewModel.uiStateProductDetail,navController, appViewModel)
             }
         }
 

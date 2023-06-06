@@ -14,4 +14,5 @@
     <string name="acquista">Acquista ora</string>
     <string name="pagamentoOK">"Congratulazioni"</string>
     <string name="pagamentoKO">Errore di pagamento</string>
+    <string name="deleteProduct">Delete</string>
 </resources>

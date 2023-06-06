@@ -8,6 +8,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -29,6 +30,9 @@ interface AppService{
 
     @GET("prodotto-api/prodotti/{idProdotto}")
     suspend fun getProduct(@Path("idProdotto") idProdotto: Long): Product
+
+    @DELETE("prodotto-api/prodotti/{idProdotto}")
+    suspend fun deleteProduct(@Path("idProdotto") idProdotto: Long)
 
 
 }
