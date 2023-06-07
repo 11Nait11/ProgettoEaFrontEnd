@@ -6,11 +6,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.progettoeafrontend.model.Product
 import com.example.progettoeafrontend.network.Service
 
 import kotlinx.coroutines.launch
 import java.io.IOException
-
 
 
 sealed interface UiStateProduct {
@@ -24,15 +24,21 @@ sealed interface UiStateProductDetail {
     object Loading : UiStateProductDetail
 }
 
-class AppViewModel : ViewModel(){
+class viewModelProduct : ViewModel(){
 
     var uiStateProduct: UiStateProduct by mutableStateOf(UiStateProduct.Loading)
         private set
     var uiStateProductDetail: UiStateProductDetail by mutableStateOf(UiStateProductDetail.Loading)
         private set
 
-    init {
+    var comprato by  mutableStateOf(false)
 
+    init {getProducts()}
+
+    fun setComprato(){ comprato=true }
+
+    fun setUiStateProductDetail(product: Product){
+        uiStateProductDetail=UiStateProductDetail.Success(product)
     }
 
 
@@ -44,6 +50,20 @@ class AppViewModel : ViewModel(){
                 Log.d("Pippo","entroImage")
                 val listResult = Service.retrofitService.getImages()
                 Log.d("Pippo","ottengoImage")
+                UiStateProduct.Success(resultList = listResult)
+            } catch (e: IOException) { UiStateProduct.Error }
+        }
+    }
+
+
+
+
+
+    fun getProducts() {
+//    avvio operaz. asyn per getImages()
+        viewModelScope.launch {
+            uiStateProduct = try {
+                val listResult = Service.retrofitService.getProducts()
                 UiStateProduct.Success(resultList = listResult)
             } catch (e: IOException) { UiStateProduct.Error }
         }

@@ -2,6 +2,7 @@ package com.example.progettoeafrontend.network
 
 
 import com.example.progettoeafrontend.model.Image
+import com.example.progettoeafrontend.model.Message
 import com.example.progettoeafrontend.model.Product
 import com.example.progettoeafrontend.model.User
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -28,9 +29,18 @@ interface AppService{
     @GET("image-api/images")
     suspend fun getImages():List<Image>
 
+
+    /**messaggi*/
+    @GET("messaggio-api/messaggi/utente/{idUtente}")
+    suspend fun getMessages(@Path("idUtente") idUtente:Long):List<Message>
+
+
+
+    /** prodotti */
+    @GET("prodotto-api/prodotti")
+    suspend fun getProducts(): List<Product>
     @GET("prodotto-api/prodotti/{idProdotto}")
     suspend fun getProduct(@Path("idProdotto") idProdotto: Long): Product
-
     @DELETE("prodotto-api/prodotti/{idProdotto}")
     suspend fun deleteProduct(@Path("idProdotto") idProdotto: Long)
 

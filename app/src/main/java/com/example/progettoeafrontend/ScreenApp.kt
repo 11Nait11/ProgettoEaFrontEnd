@@ -38,7 +38,6 @@ import com.example.progettoeafrontend.ui.Search
 
 import com.example.progettoeafrontend.ui.theme.ProgettoEaFrontEndTheme
 
-
 enum class ScreenApp(@StringRes val title:Int){
     Home(title = R.string.home),
     Search(title = R.string.search),
@@ -53,7 +52,8 @@ enum class ScreenApp(@StringRes val title:Int){
 @Composable
 fun screenApp() {
 
-    val appViewModel:AppViewModel = viewModel()
+    val viewModelProduct:viewModelProduct = viewModel()
+    val viewModelMessage:viewModelMessage= viewModel()
     val navController = rememberNavController()
     Scaffold(
         bottomBar = {
@@ -66,8 +66,6 @@ fun screenApp() {
                 iconButton(icon = Icons.Filled.Email, onClick = {navController.navigate(ScreenApp.Message.name)}, R.string.message)
                 iconButton(icon = Icons.Filled.AccountBox, onClick = {navController.navigate(ScreenApp.Account.name)}, R.string.account)
             }
-
-
         }
     ) {innerPadding ->
         NavHost(
@@ -77,10 +75,8 @@ fun screenApp() {
         ){
 
             composable(route=ScreenApp.Home.name){
-
-                Home(appViewModel.uiStateProduct,navController, appViewModel)
+                Home(viewModelProduct.uiStateProduct,navController, viewModelProduct)
             }
-
             composable(route=ScreenApp.Search.name){
                 Search()
             }
@@ -88,41 +84,34 @@ fun screenApp() {
                 Add()
             }
             composable(route=ScreenApp.Message.name){
-                Message()
-
-
+                Message(viewModelMessage.uiStateMessage,viewModelMessage)
             }
             composable(route=ScreenApp.Account.name){
                 Account()
             }
             composable(route= ScreenApp.ProductDetail.name){
-                ProductDetail(appViewModel.uiStateProductDetail,navController, appViewModel)
+                ProductDetail(viewModelProduct.uiStateProductDetail,navController, viewModelProduct)
             }
         }
 
     }
 }
 
-
-
 @Composable
 fun iconButton(
     icon: ImageVector,
     onClick:() -> Unit,
     @StringRes label: Int,
-
 ){
     IconButton(
         onClick = onClick,
     ) {
-
         Column(Modifier.fillMaxHeight(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,) {
             Icon(icon, contentDescription = stringResource(label))
             Text(text = stringResource(id = label), fontSize = 9.sp)
         }
-
     }
 }
 
