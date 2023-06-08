@@ -1,17 +1,14 @@
 package com.example.progettoeafrontend.model
 
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
-
-
 @Serializable
-data class Message(
-    val id: Long,
-    val testo: String,
-    val dataInvio: String,
-    val mittenteNome:String,
-    val destinatarioNome:String,
-    val mittenteId: Long,
-    val destinatarioId: Long,
-
-)
+data class Message(var id: Long=0,
+              var testo: String,
+              var dataInvio: String="",
+              var mittenteNome: String="",
+              var destinatarioNome: String="",
+              var mittenteId: Long,
+              var destinatarioId: Long) {
+}

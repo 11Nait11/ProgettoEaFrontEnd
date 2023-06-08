@@ -8,6 +8,7 @@ data class Product(
     val nomeProdotto: String,
     val prezzo: Double,
     val venditoreId:Long,
+    val venditoreNome:String,
     val images : List<Image>
 
     )

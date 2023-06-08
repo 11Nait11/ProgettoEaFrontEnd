@@ -6,9 +6,9 @@
     <string name="message">Message\n</string>
     <string name="account">Account\n</string>
     <string name="loading">Loading\n</string>
-    <string name="loading_failed">Failed to load</string>
+    <string name="loading_failed">Errore di caricamento </string>
     <string name="prodotto">Prodotto\n</string>
-    <string name="img_prodotto">Immage Prodotto\n</string>
+    <string name="img_prodotto">Image Product\n</string>
     <string name="productDetail">dettagli prodotto</string>
     <string name="cart">icona carrello</string>
     <string name="acquista">Acquista ora</string>
@@ -16,4 +16,8 @@
     <string name="pagamentoKO">Errore di pagamento</string>
     <string name="deleteProduct">Delete</string>
     <string name="euro">euro</string>
+    <string name="refresh">refresh\n</string>
+    <string name="messageDetail">message detail\n</string>
+    <string name="sendMex">Contatta Venditore\n</string>
+    <string name="sendMessage">writemessage\n</string>
 </resources>

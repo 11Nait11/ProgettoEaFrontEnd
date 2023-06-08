@@ -2,23 +2,22 @@ package com.example.progettoeafrontend.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -33,19 +32,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.example.progettoeafrontend.R
+import com.example.progettoeafrontend.ScreenApp
 import com.example.progettoeafrontend.UiStateMessage
-import com.example.progettoeafrontend.UiStateProduct
 import com.example.progettoeafrontend.model.Message
-import com.example.progettoeafrontend.model.Product
 import com.example.progettoeafrontend.viewModelMessage
-import com.example.progettoeafrontend.viewModelProduct
 
 
 @Composable
-fun Message(uiState:UiStateMessage, viewModel: viewModelMessage,modifier: Modifier = Modifier){
+fun MessageList(uiState:UiStateMessage, viewModel: viewModelMessage, navController: NavController, modifier: Modifier = Modifier){
 
     Text(text = "Benvenoob sono Message")
 
@@ -54,15 +50,18 @@ fun Message(uiState:UiStateMessage, viewModel: viewModelMessage,modifier: Modifi
 
     when(uiState){
         is UiStateMessage.Loading -> LoadingScreenMessage(modifier)
-        is UiStateMessage.Success -> ResultScreenMessage(uiState.resultList as List<Message>)
-        is UiStateMessage.Error -> ErrorScreenMessage(modifier)
+        is UiStateMessage.Success -> ResultScreenMessage(uiState.map,navController)
+        is UiStateMessage.Error -> ErrorScreenMessage(modifier,viewModel)
     }
 
     
 }
 
 @Composable
-fun ResultScreenMessage(messages:List<Message>) {
+fun ResultScreenMessage(
+    chat: MutableMap<Pair<String, String>, MutableList<String>>,
+    navController: NavController
+) {
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Column(modifier = Modifier.padding(16.dp)) {
 
@@ -71,9 +70,9 @@ fun ResultScreenMessage(messages:List<Message>) {
             Spacer(modifier = Modifier.height(16.dp))
 
             LazyColumn {
-                items(messages) { message ->
+                items(chat.entries.toList()) { entry ->
                     Row{
-                        MessageItem(message)
+                        MessageItem(entry.key,entry.value,navController)
                     }
 
                     Spacer(modifier = Modifier.height(10.dp))
@@ -84,12 +83,12 @@ fun ResultScreenMessage(messages:List<Message>) {
 }
 
 @Composable
-fun MessageItem(message: Message) {
+fun MessageItem(key: Pair<String, String>, value: MutableList<String>, navController: NavController) {
+    val valueAsString = value.joinToString(",")
     Row(verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .clip(RoundedCornerShape(20.dp))
-            .clickable { { } }
-    ) {
+            .clickable { navController.navigate("${ScreenApp.MessageDetails.name}/$valueAsString") }    ) {
         Image(
             painter = painterResource(id = R.drawable.ic_broken_image),
             contentDescription = null,
@@ -106,12 +105,12 @@ fun MessageItem(message: Message) {
         ) {
             Text(
 //                todo if(mittente!=da loggato) text=mittente else destinatario
-                text = message.destinatarioNome,
+                text = key.second,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.primary
             )
             Text(
-                text = message.testo,
+                text = value[0],
                 style = MaterialTheme.typography.bodySmall,
                 color = Color.Gray,
                 maxLines = 2,
@@ -121,14 +120,30 @@ fun MessageItem(message: Message) {
     }
 }
 
+fun messageDetail() {
+
+
+}
+
 @Composable
-fun ErrorScreenMessage(modifier: Modifier = Modifier) {
+fun ErrorScreenMessage(modifier: Modifier = Modifier,viewModel: viewModelMessage) {
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier.fillMaxSize()
     ) {
-        Text(stringResource(R.string.loading_failed))
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(stringResource(R.string.loading_failed))
+            IconButton(onClick = { viewModel.refresh() }) {
+                Icon(Icons.Default.Refresh, contentDescription = stringResource(id = R.string.refresh))
+            }
+        }
     }
+
 }
 
 @Composable

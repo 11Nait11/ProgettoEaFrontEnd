@@ -5,6 +5,7 @@ import android.util.Base64
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -27,9 +28,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 
 import androidx.compose.ui.unit.dp
@@ -58,7 +62,8 @@ fun Home(uiState:UiStateProduct, navController : NavController,
     when(uiState){
         is UiStateProduct.Loading -> LoadingScreen(modifier)
         is UiStateProduct.Success -> ResultScreen(uiState.resultList as List<Product>, modifier,navController, viewModel )
-        is UiStateProduct.Error -> ErrorScreen(modifier)
+        is UiStateProduct.Error -> ErrorScreen(modifier,viewModel)
+
     }
 
 }
@@ -101,12 +106,21 @@ fun ResultScreen(products: List<Product>, modifier: Modifier = Modifier, navCont
 }
 
 @Composable
-fun ErrorScreen(modifier: Modifier = Modifier) {
+fun ErrorScreen(modifier: Modifier = Modifier,viewModel: viewModelProduct) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier.fillMaxSize()
     ) {
-        Text(stringResource(R.string.loading_failed))
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Text(stringResource(R.string.loading_failed))
+            IconButton(onClick = { viewModel.refresh() }) {
+                Icon(Icons.Default.Refresh, contentDescription = stringResource(id = R.string.refresh))
+            }
+        }
     }
 }
 
@@ -158,9 +172,8 @@ fun photoCard(product: Product, modifier: Modifier = Modifier) {
 }
 
 fun clickProduct(navController : NavController, viewModel: viewModelProduct, product: Product){
-    viewModel.getProductDetail(prodottoId = product.id)
-    Log.d("c","CLICK")
-//    viewModel.setUiStateProductDetail(product)
+//    viewModel.getProductDetail(prodottoId = product.id)
+    viewModel.setUiStateProductDetail(product)
     navController.navigate(ScreenApp.ProductDetail.name)
 
 }

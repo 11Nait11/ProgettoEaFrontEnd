@@ -26,15 +26,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.progettoeafrontend.ui.Account
 import com.example.progettoeafrontend.ui.Add
 import com.example.progettoeafrontend.ui.Home
-import com.example.progettoeafrontend.ui.Message
+import com.example.progettoeafrontend.ui.MessageList
+import com.example.progettoeafrontend.ui.MessageDetail
 import com.example.progettoeafrontend.ui.ProductDetail
 import com.example.progettoeafrontend.ui.Search
+import com.example.progettoeafrontend.ui.WriteMessage
 
 import com.example.progettoeafrontend.ui.theme.ProgettoEaFrontEndTheme
 
@@ -44,7 +48,9 @@ enum class ScreenApp(@StringRes val title:Int){
     Add(title = R.string.add),
     Message(title = R.string.message),
     Account(title = R.string.account),
-    ProductDetail(title = R.string.productDetail)
+    ProductDetail(title = R.string.productDetail),
+    MessageDetails(title = R.string.messageDetail),
+    WriteMessage(title = R.string.sendMessage)
 }
 
 
@@ -84,13 +90,30 @@ fun screenApp() {
                 Add()
             }
             composable(route=ScreenApp.Message.name){
-                Message(viewModelMessage.uiStateMessage,viewModelMessage)
+                MessageList(viewModelMessage.uiStateMessage,viewModelMessage,navController)
             }
             composable(route=ScreenApp.Account.name){
                 Account()
             }
             composable(route= ScreenApp.ProductDetail.name){
                 ProductDetail(viewModelProduct.uiStateProductDetail,navController, viewModelProduct)
+            }
+
+            composable(route = "${ScreenApp.MessageDetails.name}/{value}"
+            ) { backStackEntry ->
+                val value = backStackEntry.arguments?.getString("value")?.split(",")?.toList()
+                MessageDetail(value)
+            }
+
+            composable(route = "${ScreenApp.WriteMessage.name}?venditoreId={venditoreId}&venditoreNome={venditoreNome}",
+                arguments = listOf(
+                    navArgument("venditoreId") { type = NavType.LongType },
+                    navArgument("venditoreNome") { type = NavType.StringType }
+                )
+            ) { backStackEntry ->
+                val venditoreId = backStackEntry.arguments?.getLong("venditoreId") ?: 0L
+                val venditoreNome = backStackEntry.arguments?.getString("venditoreNome") ?: ""
+                WriteMessage(viewModelMessage, navController, venditoreId, venditoreNome)
             }
         }
 

@@ -1,10 +1,12 @@
 package com.example.progettoeafrontend.ui
 
 import android.app.Activity
+import android.os.Bundle
 import android.util.Base64
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,6 +16,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
@@ -35,6 +39,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -43,6 +48,7 @@ import com.example.progettoeafrontend.R
 import com.example.progettoeafrontend.UiStateProductDetail
 import com.example.progettoeafrontend.model.Product
 import com.example.progettoeafrontend.ScreenApp
+import com.example.progettoeafrontend.viewModelMessage
 
 
 @Composable
@@ -51,7 +57,7 @@ fun ProductDetail(uiState: UiStateProductDetail, navController : NavController, 
     when(uiState){
         is UiStateProductDetail.Loading -> LoadingScreen(modifier)
         is UiStateProductDetail.Success -> ResultScreenProduct(uiState.result as Product, modifier,navController, viewModel )
-        is UiStateProductDetail.Error -> ErrorScreen(modifier)
+        is UiStateProductDetail.Error -> ErrorScreen(modifier,viewModel)
     }
 }
 
@@ -67,7 +73,7 @@ fun ResultScreenProduct(product : Product, modifier: Modifier = Modifier, navCon
 //        comprato=false
     }
 
-        Carousel(product =product,viewModel)
+        Carousel(product =product,viewModel,navController)
 }
 
 
@@ -84,7 +90,7 @@ private fun alert(
     val errorMessage = remember { mutableStateOf<String?>(null) }
     val paga = remember { mutableStateOf("") }
 
-
+    //metodoto di pagamento + cancella prodotto
     LaunchedEffect(key1 = product.prezzo) {
         try {
             paga.value=PaymentFactory.getImp().paga( product.prezzo)
@@ -126,7 +132,7 @@ private fun alert(
 }
 
 @Composable
-fun Carousel(product: Product,viewModel: viewModelProduct) {
+fun Carousel(product: Product,viewModel: viewModelProduct,navController: NavController) {
     Text(text = "Dettagli Annuncio", fontSize = 30.sp)
 
     Column(modifier = Modifier
@@ -158,27 +164,42 @@ fun Carousel(product: Product,viewModel: viewModelProduct) {
         }
 
 
+        /** button ContattaVenditore + Compra */
+
         Spacer(modifier = Modifier.height(16.dp))
+        Row() {
+            Button(onClick = { goToWriteMessage(navController,product.venditoreId,product.venditoreNome) }) {
+                Icon(
+                    Icons.Default.Email,
+                    contentDescription = stringResource(id = R.string.sendMex),
+                    modifier = Modifier.size(14.dp)
+                )
+                Text(
+                    text = stringResource(id = R.string.sendMex),
+                    textAlign = TextAlign.Center,
+                    overflow = TextOverflow.Visible,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = { viewModel.setComprato() }) {
+                Icon(
+                    painterResource(id = R.drawable.pay),
+                    contentDescription = stringResource(id = R.string.cart),
+                    modifier = Modifier.size(14.dp)
+                )
+                Text(
+                    text = stringResource(id = R.string.acquista),
+                    textAlign = TextAlign.Center,
+                    overflow = TextOverflow.Visible,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
 
-        Button(onClick = {viewModel.setComprato()} ) {
-
-            Icon(
-                painterResource(id = R.drawable.pay),
-                contentDescription = stringResource(id = R.string.cart),
-                modifier = Modifier.size(24.dp) // Modifica la dimensione dell'icona se necessario
-            )
-            Text(
-                text=stringResource(id = R.string.acquista),
-                textAlign = TextAlign.Center,
-                overflow = TextOverflow.Visible,
-                modifier = Modifier.padding(start = 8.dp)
-            )
-
+            }
         }
 
 
         Spacer(modifier = Modifier.height(16.dp))
-
         //#007782 Colore di Vinted -> 0xFF007782 in esadecimale
         LazyColumn(modifier = Modifier.weight(1f)) {
             item {
@@ -236,6 +257,10 @@ fun Carousel(product: Product,viewModel: viewModelProduct) {
         }
     }
 
+}
+
+fun goToWriteMessage(navController: NavController, venditoreId: Long, venditoreNome: String) {
+    navController.navigate(ScreenApp.WriteMessage.name + "?venditoreId=$venditoreId&venditoreNome=$venditoreNome")
 }
 
 

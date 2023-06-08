@@ -41,6 +41,11 @@ class viewModelProduct : ViewModel(){
         uiStateProductDetail=UiStateProductDetail.Success(product)
     }
 
+    fun refresh() {
+        uiStateProduct=UiStateProduct.Loading
+        getProducts()
+    }
+
 
      fun getImages() {
 //    avvio operaz. asyn per getImages()
@@ -60,7 +65,6 @@ class viewModelProduct : ViewModel(){
 
 
     fun getProducts() {
-//    avvio operaz. asyn per getImages()
         viewModelScope.launch {
             uiStateProduct = try {
                 val listResult = Service.retrofitService.getProducts()
@@ -93,6 +97,10 @@ class viewModelProduct : ViewModel(){
             }
         Log.d("DELETE", "Porodotto Cancellato " +idProd)
     }
+
+
+
+
 
 
 }
