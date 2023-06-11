@@ -49,12 +49,12 @@ import com.example.progettoeafrontend.ScreenApp
 import com.example.progettoeafrontend.model.Product
 
 
+/**Visualizza la lista di prodotti (se tutto è andato bene)*/
 @Composable
 fun Home(uiState:UiStateProduct, navController : NavController,
          viewModel: viewModelProduct,
-         modifier: Modifier = Modifier,
-
-         ){
+         modifier: Modifier = Modifier, )
+{
 
     if(uiState==UiStateProduct.Loading || uiState==UiStateProduct.Error) // todo: or lista vuota
         viewModel.getProducts()
@@ -88,7 +88,7 @@ fun  LoadingScreen(modifier: Modifier = Modifier) {
 fun ResultScreen(products: List<Product>, modifier: Modifier = Modifier, navController : NavController,viewModel: viewModelProduct) {
     Column() {
 
-        Text(text = "Articoli in vendita: ", fontSize = 20.sp)
+        Text(text = stringResource(id = R.string.articoliVendita), fontSize = 20.sp)
         LazyVerticalGrid(
             columns = GridCells.Adaptive(150.dp),
             modifier = modifier.fillMaxWidth(),
@@ -124,6 +124,7 @@ fun ErrorScreen(modifier: Modifier = Modifier,viewModel: viewModelProduct) {
     }
 }
 
+/**formattazione Prodotto*/
 @Composable
 fun photoCard(product: Product, modifier: Modifier = Modifier) {
     Card(
@@ -137,6 +138,8 @@ fun photoCard(product: Product, modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally)
         {
+
+            /**immagine prodotto - base64->ByteArray*/
             Box(modifier = Modifier.size(120.dp)) {
                 val imageData: ByteArray = Base64.decode(product.images[0].image, Base64.DEFAULT)
                 AsyncImage(
@@ -153,6 +156,7 @@ fun photoCard(product: Product, modifier: Modifier = Modifier) {
 
                 Text(text = product.nomeProdotto, style = MaterialTheme.typography.bodyMedium)
 
+            /**info prodotto*/
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Spacer(modifier = Modifier.width(4.dp)) // Spazio tra l'icona e il testo
                 Text(
@@ -171,6 +175,7 @@ fun photoCard(product: Product, modifier: Modifier = Modifier) {
     }
 }
 
+/**naviga su productDetail- disattivata getById*/
 fun clickProduct(navController : NavController, viewModel: viewModelProduct, product: Product){
 //    viewModel.getProductDetail(prodottoId = product.id)
     viewModel.setUiStateProductDetail(product)

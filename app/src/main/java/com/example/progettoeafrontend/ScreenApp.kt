@@ -1,5 +1,6 @@
 package com.example.progettoeafrontend
 
+import android.net.Uri
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,7 +32,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.progettoeafrontend.ui.Account
+import com.example.progettoeafrontend.model.Message
 import com.example.progettoeafrontend.ui.Add
 import com.example.progettoeafrontend.ui.Home
 import com.example.progettoeafrontend.ui.MessageList
@@ -41,6 +42,8 @@ import com.example.progettoeafrontend.ui.Search
 import com.example.progettoeafrontend.ui.WriteMessage
 
 import com.example.progettoeafrontend.ui.theme.ProgettoEaFrontEndTheme
+import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken
+import com.google.gson.Gson
 
 enum class ScreenApp(@StringRes val title:Int){
     Home(title = R.string.home),
@@ -93,16 +96,19 @@ fun screenApp() {
                 MessageList(viewModelMessage.uiStateMessage,viewModelMessage,navController)
             }
             composable(route=ScreenApp.Account.name){
-                Account()
+//                Account()
             }
             composable(route= ScreenApp.ProductDetail.name){
                 ProductDetail(viewModelProduct.uiStateProductDetail,navController, viewModelProduct)
             }
 
-            composable(route = "${ScreenApp.MessageDetails.name}/{value}"
+            /**legge json + cast List<Message>*/
+            composable(
+                route = "${ScreenApp.MessageDetails.name}/{jsonValue}"
             ) { backStackEntry ->
-                val value = backStackEntry.arguments?.getString("value")?.split(",")?.toList()
-                MessageDetail(value)
+                val value = Uri.decode(backStackEntry.arguments?.getString("jsonValue") ?: "")
+                val messages: List<Message>? = Gson().fromJson(value, object : TypeToken<List<Message>>() {}.type)
+                MessageDetail(messages,navController)
             }
 
             composable(route = "${ScreenApp.WriteMessage.name}?venditoreId={venditoreId}&venditoreNome={venditoreNome}",
@@ -138,10 +144,3 @@ fun iconButton(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun Preview() {
-    ProgettoEaFrontEndTheme {
-        screenApp()
-    }
-}

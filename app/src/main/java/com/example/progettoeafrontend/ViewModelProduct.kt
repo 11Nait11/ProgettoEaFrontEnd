@@ -31,37 +31,30 @@ class viewModelProduct : ViewModel(){
     var uiStateProductDetail: UiStateProductDetail by mutableStateOf(UiStateProductDetail.Loading)
         private set
 
+    /**stato di ProductDetail,inserito qui per darlo a alert - da riovedere*/
     var comprato by  mutableStateOf(false)
+        private set
 
     init {getProducts()}
 
-    fun setComprato(){ comprato=true }
 
+
+    /**setComprato per click Button in Prodotto*/
+    fun setCompratoTrue(){ comprato=true }
+    fun setCompratoFalse(){ comprato=false }
+
+
+    /**navigazione senza get backEnd porodotto preso dalla MessageList -  da rivedere*/
     fun setUiStateProductDetail(product: Product){
         uiStateProductDetail=UiStateProductDetail.Success(product)
     }
 
+
+    /**ricarica prodotto da backEnd*/
     fun refresh() {
         uiStateProduct=UiStateProduct.Loading
         getProducts()
     }
-
-
-     fun getImages() {
-//    avvio operaz. asyn per getImages()
-        viewModelScope.launch {
-            Log.d("Pippo","getimages")
-            uiStateProduct = try {
-                Log.d("Pippo","entroImage")
-                val listResult = Service.retrofitService.getImages()
-                Log.d("Pippo","ottengoImage")
-                UiStateProduct.Success(resultList = listResult)
-            } catch (e: IOException) { UiStateProduct.Error }
-        }
-    }
-
-
-
 
 
     fun getProducts() {
@@ -71,21 +64,6 @@ class viewModelProduct : ViewModel(){
                 UiStateProduct.Success(resultList = listResult)
             } catch (e: IOException) { UiStateProduct.Error }
         }
-    }
-
-    fun getProductDetail(prodottoId:Long){
-//        gestire diversamente ?
-        uiStateProductDetail=UiStateProductDetail.Loading
-        viewModelScope.launch {
-            Log.d("Pippo","getProd")
-            uiStateProductDetail = try {
-                Log.d("Pippo","entroPRdo")
-                val result = Service.retrofitService.getProduct(prodottoId)
-                Log.d("Pippo","ottengoProd")
-                UiStateProductDetail.Success(result= result)
-            } catch (e: IOException) { UiStateProductDetail.Error }
-        }
-
     }
 
     fun deleteProduct(idProd: Long) {
@@ -100,6 +78,35 @@ class viewModelProduct : ViewModel(){
 
 
 
+/**logica vecchia - da rivedere*/
+    fun getImages() {
+//    avvio operaz. asyn per getImages()
+        viewModelScope.launch {
+            Log.d("Pippo","getimages")
+            uiStateProduct = try {
+                Log.d("Pippo","entroImage")
+                val listResult = Service.retrofitService.getImages()
+                Log.d("Pippo","ottengoImage")
+                UiStateProduct.Success(resultList = listResult)
+            } catch (e: IOException) { UiStateProduct.Error }
+        }
+    }
+
+    /**get singolo prodotto forse non necessaria - da rivedere */
+    fun getProductDetail(prodottoId:Long){
+//        gestire diversamente ?
+        uiStateProductDetail=UiStateProductDetail.Loading
+        viewModelScope.launch {
+            Log.d("Pippo","getProd")
+            uiStateProductDetail = try {
+                Log.d("Pippo","entroPRdo")
+                val result = Service.retrofitService.getProduct(prodottoId)
+                Log.d("Pippo","ottengoProd")
+                UiStateProductDetail.Success(result= result)
+            } catch (e: IOException) { UiStateProductDetail.Error }
+        }
+
+    }
 
 
 

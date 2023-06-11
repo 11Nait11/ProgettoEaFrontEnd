@@ -1,7 +1,6 @@
 package com.example.progettoeafrontend.ui
 
 import android.app.Activity
-import android.os.Bundle
 import android.util.Base64
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,7 +38,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -48,7 +46,6 @@ import com.example.progettoeafrontend.R
 import com.example.progettoeafrontend.UiStateProductDetail
 import com.example.progettoeafrontend.model.Product
 import com.example.progettoeafrontend.ScreenApp
-import com.example.progettoeafrontend.viewModelMessage
 
 
 @Composable
@@ -67,74 +64,19 @@ fun ResultScreenProduct(product : Product, modifier: Modifier = Modifier, navCon
     if(viewModel.comprato){
         alert(
             product=product,
-            backHome = { navController.navigate(ScreenApp.Home.name) },
-            viewModel=viewModel
-        )
-//        comprato=false
+            backToHome = { backToHome(navController,viewModel) },
+            viewModel=viewModel )
     }
-
-        Carousel(product =product,viewModel,navController)
+    Carousel(product =product,viewModel,navController)
 }
 
 
-@Composable
-private fun alert(
-    product: Product,
-    backHome: () -> Unit,
-    modifier: Modifier = Modifier,
-    viewModel: viewModelProduct
-) {
-
-    val activity = (LocalContext.current as Activity)
-
-    val errorMessage = remember { mutableStateOf<String?>(null) }
-    val paga = remember { mutableStateOf("") }
-
-    //metodoto di pagamento + cancella prodotto
-    LaunchedEffect(key1 = product.prezzo) {
-        try {
-            paga.value=PaymentFactory.getImp().paga( product.prezzo)
-            viewModel.deleteProduct(product.id)
-
-        } catch (e: PaymentFailException) { errorMessage.value = "${e.message}" }
-    }
-    AlertDialog(
-        onDismissRequest = {},
-        title = {
-            if (errorMessage.value != null)
-                Text(text = stringResource(id = R.string.pagamentoKO))
-            else
-                Text(text = stringResource(id = R.string.pagamentoOK), textAlign = TextAlign.Center)
-        },
-        text = {
-            if (errorMessage.value != null)
-                Text(
-                    text = errorMessage.value!!,
-                    textAlign = TextAlign.Center,
-                    overflow = TextOverflow.Visible)
-            else
-                Text(
-                    text = paga.value,
-                    textAlign = TextAlign.Center, overflow = TextOverflow.Visible)
-        },
-        modifier = modifier,
-        dismissButton = {
-            TextButton(onClick = backHome) {
-                Text(text = "Esci")
-            }
-        },
-        confirmButton = {
-            TextButton(onClick = backHome) {
-                Text(text = "Torna alla Home")
-            }
-        }
-    )
-}
 
 @Composable
 fun Carousel(product: Product,viewModel: viewModelProduct,navController: NavController) {
     Text(text = "Dettagli Annuncio", fontSize = 30.sp)
 
+    /** Immagine Principale*/
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(top = 40.dp)) {
@@ -142,15 +84,17 @@ fun Carousel(product: Product,viewModel: viewModelProduct,navController: NavCont
             modifier = Modifier.weight(1f),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(items=product.images, key = { photo64 -> photo64.id }) { photo64 ->
+            items(items=product.images, key = { photo64 -> photo64.id }) {
+                    photo64 ->
                 val imageData: ByteArray = Base64.decode(photo64.image, Base64.DEFAULT)
+
                 Box(
                     modifier = Modifier.size(400.dp),
                     contentAlignment = Alignment.Center,
                 ) {
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
-                            .data(imageData)
+                            .data(imageData) /**   byteArray da base64*/
                             .crossfade(true)
                             .build(),
                         error = painterResource(R.drawable.ic_broken_image),
@@ -165,10 +109,12 @@ fun Carousel(product: Product,viewModel: viewModelProduct,navController: NavCont
 
 
         /** button ContattaVenditore + Compra */
-
         Spacer(modifier = Modifier.height(16.dp))
         Row() {
-            Button(onClick = { goToWriteMessage(navController,product.venditoreId,product.venditoreNome) }) {
+
+            /** Contatta */
+            Button(
+                onClick = { goToWriteMessage(navController,product.venditoreId,product.venditoreNome) }) {
                 Icon(
                     Icons.Default.Email,
                     contentDescription = stringResource(id = R.string.sendMex),
@@ -182,7 +128,10 @@ fun Carousel(product: Product,viewModel: viewModelProduct,navController: NavCont
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = { viewModel.setComprato() }) {
+
+            /** Compra */
+            Button(
+                onClick = { viewModel.setCompratoTrue() }) {
                 Icon(
                     painterResource(id = R.drawable.pay),
                     contentDescription = stringResource(id = R.string.cart),
@@ -198,9 +147,9 @@ fun Carousel(product: Product,viewModel: viewModelProduct,navController: NavCont
             }
         }
 
-
         Spacer(modifier = Modifier.height(16.dp))
-        //#007782 Colore di Vinted -> 0xFF007782 in esadecimale
+
+        /**  Varie info */
         LazyColumn(modifier = Modifier.weight(1f)) {
             item {
                 Divider(modifier = Modifier
@@ -258,9 +207,74 @@ fun Carousel(product: Product,viewModel: viewModelProduct,navController: NavCont
     }
 
 }
-
+//Todo serve venditoreNome??
 fun goToWriteMessage(navController: NavController, venditoreId: Long, venditoreNome: String) {
     navController.navigate(ScreenApp.WriteMessage.name + "?venditoreId=$venditoreId&venditoreNome=$venditoreNome")
+}
+
+fun backToHome(navController: NavController, viewModel: viewModelProduct) {
+    navController.navigate(ScreenApp.Home.name)
+    viewModel.setCompratoFalse()
+}
+
+@Composable
+private fun alert(
+    product: Product,
+    backToHome: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: viewModelProduct
+) {
+
+    val activity = (LocalContext.current as Activity)
+    val pagamentoSceltoError = remember { mutableStateOf<String?>(null) }
+    val pagamentoScelto = remember { mutableStateOf("") }
+
+
+    /**Ritorna il pagamento scelto o excpetion */
+    LaunchedEffect(key1 = product.prezzo) {
+        try {
+            pagamentoScelto.value=PaymentFactory.getImp().paga( product.prezzo) //ritorna una stringa
+            viewModel.deleteProduct(product.id)
+        }
+        catch (e: PaymentFailException) {
+            pagamentoSceltoError.value = "${e.message}"
+        }
+    }
+
+    /**visualizza Messaggio di avvenuto pagamento o di errore */
+    AlertDialog(
+        onDismissRequest = {},
+        title = {
+            if (pagamentoSceltoError.value != null)
+                Text(text = stringResource(id = R.string.pagamentoKO))
+            else
+                Text(text = stringResource(id = R.string.pagamentoOK), textAlign = TextAlign.Center)
+        },
+        text = {
+            if (pagamentoSceltoError.value != null)
+                Text(
+                    text = pagamentoSceltoError.value!!,
+                    textAlign = TextAlign.Center,
+                    overflow = TextOverflow.Visible)
+            else
+                Text(
+                    text = pagamentoScelto.value,
+                    textAlign = TextAlign.Center, overflow = TextOverflow.Visible)
+        },
+        modifier = modifier,
+
+        /**button di uscita*/
+        dismissButton = {
+            TextButton(onClick = backToHome) {
+                Text(text = "Esci")
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = backToHome) {
+                Text(text = "Torna alla Home")
+            }
+        }
+    )
 }
 
 

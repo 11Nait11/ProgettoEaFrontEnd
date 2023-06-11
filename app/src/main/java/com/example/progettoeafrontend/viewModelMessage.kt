@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 sealed interface UiStateMessage {
-    data class Success(val map: MutableMap<Pair<String, String>, MutableList<String>>) : UiStateMessage
+    data class Success(val map: MutableMap<Pair<String, String>, MutableList<Message>>) : UiStateMessage
     object Error : UiStateMessage
     object Loading : UiStateMessage
 }
@@ -36,33 +36,35 @@ class viewModelMessage : ViewModel(){
 //        getMessages()
     }
 
+    /**ottieni messsaggi da backEnd, costruisce mappa per ordinare visualizzazione anteprima MessageList*/
     fun getMessages() {
-
         viewModelScope.launch {
-            val map: MutableMap<Pair<String, String>, MutableList<String>> = mutableMapOf()
+            val map: MutableMap<Pair<String, String>, MutableList<Message>> = mutableMapOf()
 
             uiStateMessage = try {
-                val listResult = Service.retrofitService.getMessages(1)
-                for(message  in listResult)
+                val userMessageList = Service.retrofitService.getMessages(1)//TODO:sosistuire con utenteLoggato
+               /**ragruppa messaggi stessa conversazione*/
+                for(userMessage  in userMessageList)
                 {
-                    val key: Pair<String, String> = if (message.mittenteNome == "Paperino") {//sosistuire con utente loggato
-                        Pair(message.mittenteNome, message.destinatarioNome)
-                    } else {
-                        Pair(message.destinatarioNome, message.mittenteNome)
-                    }
-                    val value: MutableList<String> = map[key] ?: mutableListOf()
-                    value.add(message.testo)
-                    map[key] = value
+                    /**costruisce chiave  1,2 = 2,1 (stessa Conversazione)*/
+                    val key: Pair<String, String> =
+                        if (userMessage.mittenteNome == "Paperino") //TODO:sosistuire con utenteLoggato
+                            Pair(userMessage.mittenteNome, userMessage.destinatarioNome)
+                        else
+                            Pair(userMessage.destinatarioNome, userMessage.mittenteNome)
+                    /**crea conversazione se non mappata, altrimenti aggiunge a conversazione gia mappata*/
+                    val listaConversazione: MutableList<Message> = map[key] ?: mutableListOf()
+                    listaConversazione.add(userMessage)
+                    map[key] = listaConversazione
 
-                }//for
-                UiStateMessage.Success(map)
+                }
+                UiStateMessage.Success(map)//anteprima messaggi raggruppati per conversazione
             } catch (e: IOException) { UiStateMessage.Error }
         }
     }
 
-
-
-    fun sendMessage(message: String, venditoreId: Long, venditoreNome: String) {
+    /**@Post backEnd save - TODO:inserire mittenteId=utenteLoggato */
+    fun sendMessage(message: String, venditoreId: Long) {
         val m=Message(testo=message, mittenteId = 1, destinatarioId = venditoreId)
         viewModelScope.launch {
             uiStateSendMessage = try {
@@ -72,13 +74,10 @@ class viewModelMessage : ViewModel(){
         }
     }
 
-    fun refresh() {
-        uiStateMessage=UiStateMessage.Loading
-        getMessages()
-    }
-    fun reset() {
-        uiStateSendMessage=UiStateSendMessage.Loading
-    }
+
+    /**ricontatta backEnd per ottenere messaggi*/
+    fun setLoadingMessageState() { uiStateMessage=UiStateMessage.Loading}
+    fun setLoadingSendMessageState() { uiStateSendMessage=UiStateSendMessage.Loading }
 
 
 }

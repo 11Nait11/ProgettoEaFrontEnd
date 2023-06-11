@@ -13,9 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.example.progettoeafrontend.R
 import com.example.progettoeafrontend.ScreenApp
 import com.example.progettoeafrontend.UiStateSendMessage
 import com.example.progettoeafrontend.viewModelMessage
@@ -33,82 +36,79 @@ fun WriteMessage(
 
 
     when(viewModelMessage.uiStateSendMessage ){
+    
         is UiStateSendMessage.Loading -> {}
-        is UiStateSendMessage.Success -> alert(navController = navController,viewModelMessage)
-        is UiStateSendMessage.Error -> alert2(viewModelMessage)
+        is UiStateSendMessage.Success -> alertSuccess(navController, viewModelMessage,)
+        is UiStateSendMessage.Error -> alertError(viewModelMessage,)
     }
-
 
 
     Column(
         modifier = Modifier.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "venditore id ${venditoreId} venditoreNome: ${venditoreNome}")
-        Text(
-            text = "Scrivi un messaggio",
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
 
-        TextField(
-            value = messageText,
-            onValueChange = { messageText = it },
-            modifier = Modifier.focusRequester(focusRequester)
-        )
+        /**scrivimi messaggio*/
+        Text(text = "Scrivi un Messaggio a: ${venditoreNome}", modifier = Modifier.padding(bottom = 16.dp))
+        TextField(value = messageText, onValueChange = { messageText = it }, modifier = Modifier.focusRequester(focusRequester))
 
+        /**button invio messaggio al backEnd*/
         Button(
             onClick = {
                 val message = messageText.text
                 if (message.isNotBlank()) {
-                    viewModelMessage.sendMessage(message,venditoreId,venditoreNome)
-                    messageText = TextFieldValue()
-                }
-            },
+                    viewModelMessage.sendMessage(message,venditoreId)  //@post save message
+                    if(viewModelMessage.uiStateSendMessage==UiStateSendMessage.Success)
+                        messageText = TextFieldValue()
+                } },
             modifier = Modifier.padding(top = 16.dp)
-        ) {
-            Text(text = "Invia messaggio")
-        }
-    }
+        ){Text(text = "Invia messaggio") }
+
+
+    }//fine Column
+
 
 //    focus su textField
     DisposableEffect(Unit) {
         focusRequester.requestFocus()
         onDispose { }
     }
+
+}//fine fun writeMessage
+
+/**ritorna alla home e resetta stati Message*/
+fun goToHome(navController: NavController, viewModelMessage: viewModelMessage) {
+    viewModelMessage.setLoadingSendMessageState()
+    viewModelMessage.setLoadingMessageState()
+    navController.navigate(ScreenApp.Home.name)
 }
 
+/**atterro sulla home se il messaggio è stato salvato correttamente*/
 @Composable
-private fun alert(
-    navController: NavController,
-    viewModelMessage: viewModelMessage
-
-) {
+private fun alertSuccess(navController: NavController = rememberNavController(), viewModelMessage: viewModelMessage)
+{
     AlertDialog(
         onDismissRequest = {},
-        title = {Text(text = "Conferma")},
-        text = {Text(text = "Messaggio Inviato")},
+        title = {Text(text =stringResource(id = R.string.conferma))},
+        text = {Text(text = stringResource(id = R.string.messaggioInviato))},
         confirmButton = {
-            TextButton(onClick = {goToHome(navController,viewModelMessage)}) {
-                Text(text = "Torna alla Home")
+            TextButton(onClick = { goToHome(navController,viewModelMessage) }) {
+                Text(text = stringResource(id = R.string.backToHome))
             }
         }
     )
 }
 
-fun goToHome(navController: NavController, viewModelMessage: viewModelMessage) {
-        viewModelMessage.reset()
-        navController.navigate(ScreenApp.Home.name)
-}
-
 @Composable
-private fun alert2(viewModelMessage: viewModelMessage) {
+private fun alertError(viewModelMessage: viewModelMessage)
+{
     AlertDialog(
         onDismissRequest = {},
-        title = {Text(text = "Errore")},
-        text = {Text(text = "Messaggio non Inviato")},
+        title = {Text(text =stringResource(id = R.string.errore))},
+        text = {Text(text = stringResource(id = R.string.messaggioNonInviato))},
         confirmButton = {
-            TextButton(onClick = {viewModelMessage.reset()}) {
-                Text(text = "Riprova")
+            TextButton(onClick = {viewModelMessage.setLoadingSendMessageState()}) {
+                Text(text = stringResource(id = R.string.riprova))
             }
         }
     )

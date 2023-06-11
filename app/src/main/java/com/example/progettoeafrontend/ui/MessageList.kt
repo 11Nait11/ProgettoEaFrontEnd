@@ -1,5 +1,6 @@
 package com.example.progettoeafrontend.ui
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -38,6 +39,7 @@ import com.example.progettoeafrontend.ScreenApp
 import com.example.progettoeafrontend.UiStateMessage
 import com.example.progettoeafrontend.model.Message
 import com.example.progettoeafrontend.viewModelMessage
+import com.google.gson.Gson
 
 
 @Composable
@@ -54,25 +56,24 @@ fun MessageList(uiState:UiStateMessage, viewModel: viewModelMessage, navControll
         is UiStateMessage.Error -> ErrorScreenMessage(modifier,viewModel)
     }
 
-    
 }
 
+
+/** Scorre elementi mappa e mostra anteprima*/
 @Composable
 fun ResultScreenMessage(
-    chat: MutableMap<Pair<String, String>, MutableList<String>>,
+    conversazione: MutableMap<Pair<String, String>, MutableList<Message>>,
     navController: NavController
 ) {
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Column(modifier = Modifier.padding(16.dp)) {
-
-            //Casella Messaggi
             Text(text = "Casella Messaggi ", fontSize = 20.sp, modifier = Modifier.align(Alignment.CenterHorizontally))
             Spacer(modifier = Modifier.height(16.dp))
-
             LazyColumn {
-                items(chat.entries.toList()) { entry ->
+                items(conversazione.entries.toList()) { entry ->
                     Row{
-                        MessageItem(entry.key,entry.value,navController)
+                        anteprimaMessaggi(entry.key,entry.value,navController) //chiave conversazione + intera conversazione
+//                        stampa(value = entry.value)
                     }
 
                     Spacer(modifier = Modifier.height(10.dp))
@@ -82,13 +83,17 @@ fun ResultScreenMessage(
     }
 }
 
+
+/**anterpima clickabile, manda lista  messaggi al navController tramite json
+ * utilizzare Uri.encode per leggere caratteri speciali - TODO:fix errore con alcuni caratteri speciali */
 @Composable
-fun MessageItem(key: Pair<String, String>, value: MutableList<String>, navController: NavController) {
-    val valueAsString = value.joinToString(",")
+fun anteprimaMessaggi(key: Pair<String, String>, value: MutableList<Message>, navController: NavController) {
+    val jsonValue = Gson().toJson(value)
     Row(verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .clip(RoundedCornerShape(20.dp))
-            .clickable { navController.navigate("${ScreenApp.MessageDetails.name}/$valueAsString") }    ) {
+            .clickable { navController.navigate("${ScreenApp.MessageDetails.name}/${Uri.encode(jsonValue)}")})
+    {
         Image(
             painter = painterResource(id = R.drawable.ic_broken_image),
             contentDescription = null,
@@ -110,20 +115,18 @@ fun MessageItem(key: Pair<String, String>, value: MutableList<String>, navContro
                 color = MaterialTheme.colorScheme.primary
             )
             Text(
-                text = value[0],
+                text = value[0].testo,
                 style = MaterialTheme.typography.bodySmall,
                 color = Color.Gray,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
+
         }
     }
 }
 
-fun messageDetail() {
 
-
-}
 
 @Composable
 fun ErrorScreenMessage(modifier: Modifier = Modifier,viewModel: viewModelMessage) {
@@ -138,7 +141,7 @@ fun ErrorScreenMessage(modifier: Modifier = Modifier,viewModel: viewModelMessage
             modifier = Modifier.padding(16.dp)
         ) {
             Text(stringResource(R.string.loading_failed))
-            IconButton(onClick = { viewModel.refresh() }) {
+            IconButton(onClick = { viewModel.setLoadingMessageState() }) {
                 Icon(Icons.Default.Refresh, contentDescription = stringResource(id = R.string.refresh))
             }
         }

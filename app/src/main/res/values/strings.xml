@@ -12,6 +12,7 @@
     <string name="productDetail">dettagli prodotto</string>
     <string name="cart">icona carrello</string>
     <string name="acquista">Acquista ora</string>
+    <string name="errore">Errore</string>
     <string name="pagamentoOK">"Congratulazioni"</string>
     <string name="pagamentoKO">Errore di pagamento</string>
     <string name="deleteProduct">Delete</string>
@@ -20,4 +21,13 @@
     <string name="messageDetail">message detail\n</string>
     <string name="sendMex">Contatta Venditore\n</string>
     <string name="sendMessage">writemessage\n</string>
+    <string name="messaggioNonInviato">Messaggio non Inviato</string>
+    <string name="riprova">Riprova</string>
+    <string name="conferma">Conferma\n</string>
+    <string name="messaggioInviato">Messaggio Inviato</string>
+    <string name="backToHome">Torna alla Home</string>
+    <string name="payPalPayOk">Pagamento effettuato con Paypal: importo</string>
+    <string name="listaMessaggiVuota">Nessun dettaglio del messaggio disponibile</string>
+    <string name="dettagliMessaggio">Dettagli del messaggio</string>
+    <string name="articoliVendita">Articoli in vendita</string>
 </resources>
