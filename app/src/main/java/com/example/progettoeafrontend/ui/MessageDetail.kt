@@ -104,6 +104,7 @@ fun GestioneMessaggi(item: Message) {
                 )
                 Text(
                     text = formatTime(item.dataInvio),
+//                    text = item.dataInvio,
                     fontSize = 10.sp,
                     modifier = Modifier
                         .align(Alignment.Start)
@@ -140,7 +141,7 @@ fun GestioneMessaggi(item: Message) {
 /**formatta LocalDateTime*/
 private fun formatTime(time: String): String {
     val inputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
-    val outputFormat = DateTimeFormatter.ofPattern("HH:mm - dd/MM/yyyy ")
+    val outputFormat = DateTimeFormatter.ofPattern("HH:mm:ss - dd/MM/yyyy")
     val dateTime = LocalDateTime.parse(time, inputFormat)
     return outputFormat.format(dateTime)
 }

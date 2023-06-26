@@ -24,7 +24,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
@@ -33,6 +32,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.progettoeafrontend.model.Message
+import com.example.progettoeafrontend.ui.Account
 import com.example.progettoeafrontend.ui.Add
 import com.example.progettoeafrontend.ui.Home
 import com.example.progettoeafrontend.ui.MessageList
@@ -41,7 +41,6 @@ import com.example.progettoeafrontend.ui.ProductDetail
 import com.example.progettoeafrontend.ui.Search
 import com.example.progettoeafrontend.ui.WriteMessage
 
-import com.example.progettoeafrontend.ui.theme.ProgettoEaFrontEndTheme
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken
 import com.google.gson.Gson
 
@@ -61,8 +60,9 @@ enum class ScreenApp(@StringRes val title:Int){
 @Composable
 fun screenApp() {
 
-    val viewModelProduct:viewModelProduct = viewModel()
+    val viewModelProduct:ViewModelProduct = viewModel()
     val viewModelMessage:viewModelMessage= viewModel()
+    val viewModelLogin:ViewModelLogin= viewModel()
     val navController = rememberNavController()
     Scaffold(
         bottomBar = {
@@ -96,7 +96,7 @@ fun screenApp() {
                 MessageList(viewModelMessage.uiStateMessage,viewModelMessage,navController)
             }
             composable(route=ScreenApp.Account.name){
-//                Account()
+                Account( viewModelLogin.uiStateAccount,viewModelLogin)
             }
             composable(route= ScreenApp.ProductDetail.name){
                 ProductDetail(viewModelProduct.uiStateProductDetail,navController, viewModelProduct)

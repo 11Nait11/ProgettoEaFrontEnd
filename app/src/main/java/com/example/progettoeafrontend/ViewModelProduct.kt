@@ -24,14 +24,14 @@ sealed interface UiStateProductDetail {
     object Loading : UiStateProductDetail
 }
 
-class viewModelProduct : ViewModel(){
+class ViewModelProduct : ViewModel(){
 
     var uiStateProduct: UiStateProduct by mutableStateOf(UiStateProduct.Loading)
         private set
     var uiStateProductDetail: UiStateProductDetail by mutableStateOf(UiStateProductDetail.Loading)
         private set
 
-    /**stato di ProductDetail,inserito qui per darlo a alert - da riovedere*/
+
     var comprato by  mutableStateOf(false)
         private set
 
@@ -44,7 +44,7 @@ class viewModelProduct : ViewModel(){
     fun setCompratoFalse(){ comprato=false }
 
 
-    /**navigazione senza get backEnd porodotto preso dalla MessageList -  da rivedere*/
+    /**navigazione info prodotto */
     fun setUiStateProductDetail(product: Product){
         uiStateProductDetail=UiStateProductDetail.Success(product)
     }

@@ -9,6 +9,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.progettoeafrontend.ui.Account
+import com.example.progettoeafrontend.ui.LoginScreen
 import com.example.progettoeafrontend.ui.theme.ProgettoEaFrontEndTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,7 +23,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    screenApp()
+                    LoginScreen()
+//                    Account()
+//                    screenApp()
                 }
             }
         }

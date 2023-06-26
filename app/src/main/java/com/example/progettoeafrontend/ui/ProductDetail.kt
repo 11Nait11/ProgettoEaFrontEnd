@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.progettoeafrontend.viewModelProduct
+import com.example.progettoeafrontend.ViewModelProduct
 import com.example.progettoeafrontend.R
 import com.example.progettoeafrontend.UiStateProductDetail
 import com.example.progettoeafrontend.model.Product
@@ -49,7 +49,7 @@ import com.example.progettoeafrontend.ScreenApp
 
 
 @Composable
-fun ProductDetail(uiState: UiStateProductDetail, navController : NavController, viewModel: viewModelProduct, modifier: Modifier = Modifier)
+fun ProductDetail(uiState: UiStateProductDetail, navController : NavController, viewModel: ViewModelProduct, modifier: Modifier = Modifier)
 {
     when(uiState){
         is UiStateProductDetail.Loading -> LoadingScreen(modifier)
@@ -59,7 +59,7 @@ fun ProductDetail(uiState: UiStateProductDetail, navController : NavController, 
 }
 
 @Composable
-fun ResultScreenProduct(product : Product, modifier: Modifier = Modifier, navController : NavController,viewModel: viewModelProduct) {
+fun ResultScreenProduct(product : Product, modifier: Modifier = Modifier, navController : NavController,viewModel: ViewModelProduct) {
 
     if(viewModel.comprato){
         alert(
@@ -73,7 +73,7 @@ fun ResultScreenProduct(product : Product, modifier: Modifier = Modifier, navCon
 
 
 @Composable
-fun Carousel(product: Product,viewModel: viewModelProduct,navController: NavController) {
+fun Carousel(product: Product, viewModel: ViewModelProduct, navController: NavController) {
     Text(text = "Dettagli Annuncio", fontSize = 30.sp)
 
     /** Immagine Principale*/
@@ -212,7 +212,7 @@ fun goToWriteMessage(navController: NavController, venditoreId: Long, venditoreN
     navController.navigate(ScreenApp.WriteMessage.name + "?venditoreId=$venditoreId&venditoreNome=$venditoreNome")
 }
 
-fun backToHome(navController: NavController, viewModel: viewModelProduct) {
+fun backToHome(navController: NavController, viewModel: ViewModelProduct) {
     navController.navigate(ScreenApp.Home.name)
     viewModel.setCompratoFalse()
 }
@@ -222,7 +222,7 @@ private fun alert(
     product: Product,
     backToHome: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: viewModelProduct
+    viewModel: ViewModelProduct
 ) {
 
     val activity = (LocalContext.current as Activity)

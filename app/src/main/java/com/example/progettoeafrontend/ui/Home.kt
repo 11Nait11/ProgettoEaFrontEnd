@@ -2,7 +2,6 @@ package com.example.progettoeafrontend.ui
 
 
 import android.util.Base64
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -41,7 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.progettoeafrontend.viewModelProduct
+import com.example.progettoeafrontend.ViewModelProduct
 import com.example.progettoeafrontend.R
 
 import com.example.progettoeafrontend.UiStateProduct
@@ -52,7 +51,7 @@ import com.example.progettoeafrontend.model.Product
 /**Visualizza la lista di prodotti (se tutto è andato bene)*/
 @Composable
 fun Home(uiState:UiStateProduct, navController : NavController,
-         viewModel: viewModelProduct,
+         viewModel: ViewModelProduct,
          modifier: Modifier = Modifier, )
 {
 
@@ -85,7 +84,7 @@ fun  LoadingScreen(modifier: Modifier = Modifier) {
 
 
 @Composable
-fun ResultScreen(products: List<Product>, modifier: Modifier = Modifier, navController : NavController,viewModel: viewModelProduct) {
+fun ResultScreen(products: List<Product>, modifier: Modifier = Modifier, navController : NavController,viewModel: ViewModelProduct) {
     Column() {
 
         Text(text = stringResource(id = R.string.articoliVendita), fontSize = 20.sp)
@@ -106,7 +105,7 @@ fun ResultScreen(products: List<Product>, modifier: Modifier = Modifier, navCont
 }
 
 @Composable
-fun ErrorScreen(modifier: Modifier = Modifier,viewModel: viewModelProduct) {
+fun ErrorScreen(modifier: Modifier = Modifier,viewModel: ViewModelProduct) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier.fillMaxSize()
@@ -176,7 +175,7 @@ fun photoCard(product: Product, modifier: Modifier = Modifier) {
 }
 
 /**naviga su productDetail- disattivata getById*/
-fun clickProduct(navController : NavController, viewModel: viewModelProduct, product: Product){
+fun clickProduct(navController : NavController, viewModel: ViewModelProduct, product: Product){
 //    viewModel.getProductDetail(prodottoId = product.id)
     viewModel.setUiStateProductDetail(product)
     navController.navigate(ScreenApp.ProductDetail.name)
