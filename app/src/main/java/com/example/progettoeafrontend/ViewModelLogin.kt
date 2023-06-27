@@ -84,7 +84,9 @@ class ViewModelLogin : ViewModel(){
             viewModelScope.launch {
                 uiStateAccount = try {
                     var utente = Service.retrofitService.getUtente(usernameState)
+                    Service.accessId=utente.id
                     UiStateAccount.Success(utente)
+
                 } catch (e: IOException) { UiStateAccount.Error }
             }
     }

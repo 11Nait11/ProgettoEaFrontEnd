@@ -35,10 +35,11 @@ import com.example.progettoeafrontend.R
 import com.example.progettoeafrontend.model.Message
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
 
 /**scorre lista della conversazione tra due utenti */
-@Composable
+@Composable//tutti i messaggi dell'utente loggato
 fun MessageDetail(value: List<Message>?, navController: NavHostController) {
 
 
@@ -140,8 +141,23 @@ fun GestioneMessaggi(item: Message) {
 
 /**formatta LocalDateTime*/
 private fun formatTime(time: String): String {
-    val inputFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
+    val inputFormats = listOf(
+        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS"),
+        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSS")
+    )
     val outputFormat = DateTimeFormatter.ofPattern("HH:mm:ss - dd/MM/yyyy")
-    val dateTime = LocalDateTime.parse(time, inputFormat)
-    return outputFormat.format(dateTime)
+    var dateTime: LocalDateTime? = null
+    for (format in inputFormats) {
+        try {
+            dateTime = LocalDateTime.parse(time, format)
+            break
+        } catch (e: DateTimeParseException) {
+
+        }
+    }
+    if (dateTime != null) {
+        return outputFormat.format(dateTime)
+    }
+    // Restituisci una stringa vuota o un valore di default se non è possibile analizzare la data
+    return ""
 }

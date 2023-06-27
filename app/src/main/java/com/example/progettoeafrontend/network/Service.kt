@@ -65,6 +65,7 @@ object Service {
         retrofit.create(AppService::class.java)
     }
     var accessToken: String? = null
+    var accessId:Long=0L
 }
 
 //evita inserimento header manualemente nelle request
