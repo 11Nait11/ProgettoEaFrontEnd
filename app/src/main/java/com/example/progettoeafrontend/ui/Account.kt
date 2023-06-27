@@ -43,7 +43,6 @@ import com.example.progettoeafrontend.UiStateAccount
 import com.example.progettoeafrontend.ViewModelLogin
 import com.example.progettoeafrontend.model.User
 
-import com.example.tutorialcompose2.Sezione
 
 @Composable
 fun Account(uiState:UiStateAccount, viewModelLogin: ViewModelLogin) {
@@ -202,36 +201,6 @@ fun ErrorScreenAccount(modifier: Modifier = Modifier) {
     }
 }
 
-
-
-@Composable
-fun ItemSezione(sezione: Sezione){
-    Row(verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .clip(RoundedCornerShape(20.dp))
-            .clickable { }
-            .fillMaxWidth()
-            .height(100.dp)
-    ) {
-        Icon(
-            imageVector = sezione.icona,
-            contentDescription = null,
-            modifier = Modifier
-                .size(60.dp)
-                .padding(8.dp)
-                .clip(RoundedCornerShape(20.dp)),
-            tint = MaterialTheme.colorScheme.primary
-        )
-
-        Text(
-            text = sezione.titolo,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.primary
-        )
-
-    }
-
-}
 
 
 
