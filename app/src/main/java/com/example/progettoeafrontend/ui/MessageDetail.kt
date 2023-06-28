@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.progettoeafrontend.R
 import com.example.progettoeafrontend.model.Message
+import com.example.progettoeafrontend.network.Service
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
@@ -41,7 +42,6 @@ import java.time.format.DateTimeParseException
 /**scorre lista della conversazione tra due utenti */
 @Composable//tutti i messaggi dell'utente loggato
 fun MessageDetail(value: List<Message>?, navController: NavHostController) {
-
 
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -61,11 +61,11 @@ fun MessageDetail(value: List<Message>?, navController: NavHostController) {
                 }
 
                 /**scrivi messaggio - una volta scritto messaggio ritorno alla home*/
-                //todo:ritornare nella lista messaggi? cambia fun alertSuccess() in WriteMessage
-                IconButton(
+                //TODO:ritornare nella lista messaggi? cambia fun alertSuccess() in WriteMessage
+                IconButton( // button per scrivere nuovo mess (nella conversazione)
                     onClick =
                     {
-                        if(value[0].mittenteId==1L) //todo:inserire utente loggato
+                        if(value[0].mittenteId== Service.accessId) //per capire il destinatario
                             goToWriteMessage(navController,value[0].destinatarioId,value[0].destinatarioNome)
                         else
                             goToWriteMessage(navController,value[0].mittenteId,value[0].mittenteNome)

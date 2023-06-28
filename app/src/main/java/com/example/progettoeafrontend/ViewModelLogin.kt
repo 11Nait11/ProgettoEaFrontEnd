@@ -35,7 +35,6 @@ private enum class AppState {
 
 class ViewModelLogin : ViewModel(){
 
-
     var uiStateLogin: UiStateLogin by mutableStateOf(UiStateLogin.Login)
         private set
     var uiStateAccount: UiStateAccount by mutableStateOf(UiStateAccount.Loading)
@@ -43,8 +42,6 @@ class ViewModelLogin : ViewModel(){
 
     var usernameState by mutableStateOf("")
     var passwordState by mutableStateOf("")
-
-
 
     var isLoginEnabled by  mutableStateOf(false)
         private set
@@ -65,6 +62,7 @@ class ViewModelLogin : ViewModel(){
                 if (accessToken != null) {
                     Service.accessToken = "Bearer "+accessToken
                     Log.d("login", "accessToken salvato : $accessToken")
+                    getUser()
                     UiStateLogin.Success
                 } else {
                     Log.d("login", "Token vuoto")
@@ -85,9 +83,16 @@ class ViewModelLogin : ViewModel(){
                 uiStateAccount = try {
                     var utente = Service.retrofitService.getUtente(usernameState)
                     Service.accessId=utente.id
+                    Service.accessNome=utente.nome
+                    Log.d("login","Utente loggato : $Service.accessId $Service.accessNome")
                     UiStateAccount.Success(utente)
 
-                } catch (e: IOException) { UiStateAccount.Error }
+                } catch (e: IOException) {
+                    UiStateAccount.Error
+                } catch (e: HttpException) {
+                    UiStateAccount.Error
+                }
+
             }
     }
 

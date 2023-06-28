@@ -76,7 +76,7 @@ fun WriteMessage(
 
 }//fine fun writeMessage
 
-/**ritorna alla home e resetta stati Message*/
+/**ritorna alla home e resetta stato Message(cosi visualizza eventuali nuovi messaggi nella successiva richiesta)*/
 fun goToHome(navController: NavController, viewModelMessage: viewModelMessage) {
     viewModelMessage.setLoadingSendMessageState()
     viewModelMessage.setLoadingMessageState()

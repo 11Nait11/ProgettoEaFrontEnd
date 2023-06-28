@@ -5,12 +5,15 @@ import com.example.progettoeafrontend.model.Image
 import com.example.progettoeafrontend.model.Message
 import com.example.progettoeafrontend.model.Product
 import com.example.progettoeafrontend.model.User
+import com.example.progettoeafrontend.screenApp
+import com.example.progettoeafrontend.ui.LoginScreen
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import retrofit2.HttpException
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.http.Body
@@ -66,6 +69,7 @@ object Service {
     }
     var accessToken: String? = null
     var accessId:Long=0L
+    var accessNome:String?=null
 }
 
 //evita inserimento header manualemente nelle request
@@ -84,7 +88,15 @@ class TokenInterceptor : Interceptor {
             originalRequest
         }
 
-        val response: okhttp3.Response = chain.proceed(requestWithToken)
-        return response
+
+            val response: okhttp3.Response = chain.proceed(requestWithToken)
+            if(response.code==403){
+                Log.e("Interceptor", "scaduto")
+//                goToLogin()
+
+            }
+
+            return response
+
     }
 }

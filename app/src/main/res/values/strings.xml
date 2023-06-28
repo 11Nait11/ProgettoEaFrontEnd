@@ -30,4 +30,5 @@
     <string name="listaMessaggiVuota">Nessun dettaglio del messaggio disponibile</string>
     <string name="dettagliMessaggio">Dettagli del messaggio</string>
     <string name="articoliVendita">Articoli in vendita</string>
+    <string name="login">img_login</string>
 </resources>

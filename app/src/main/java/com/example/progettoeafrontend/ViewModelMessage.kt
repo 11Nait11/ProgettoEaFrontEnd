@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.progettoeafrontend.model.Message
 import com.example.progettoeafrontend.network.Service
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import java.io.IOException
 
 sealed interface UiStateMessage {
@@ -42,16 +43,17 @@ class viewModelMessage : ViewModel(){
             val map: MutableMap<Pair<String, String>, MutableList<Message>> = mutableMapOf()
 
             uiStateMessage = try {
-                val userMessageList = Service.retrofitService.getMessages(1)//TODO:sosistuire con utenteLoggato
+                val userMessageList = Service.retrofitService.getMessages(Service.accessId)//TODO:sosistuire con utenteLoggato
                /**ragruppa messaggi stessa conversazione*/
                 for(userMessage  in userMessageList)
                 {
                     /**costruisce chiave  1,2 = 2,1 (stessa Conversazione)*/
                     val key: Pair<String, String> =
-                        if (userMessage.mittenteNome == "Paperino") //TODO:sosistuire con utenteLoggato
+                        if (userMessage.mittenteNome == Service.accessNome) //TODO:sosistuire con utenteLoggato
                             Pair(userMessage.mittenteNome, userMessage.destinatarioNome)
                         else
                             Pair(userMessage.destinatarioNome, userMessage.mittenteNome)
+
                     /**crea conversazione se non mappata, altrimenti aggiunge a conversazione gia mappata*/
                     val listaConversazione: MutableList<Message> = map[key] ?: mutableListOf()
                     listaConversazione.add(userMessage)
@@ -59,13 +61,17 @@ class viewModelMessage : ViewModel(){
 
                 }
                 UiStateMessage.Success(map)//anteprima messaggi raggruppati per conversazione
-            } catch (e: IOException) { UiStateMessage.Error }
+            } catch (e: IOException) {
+                UiStateMessage.Error
+            } catch (e: HttpException) {
+                UiStateMessage.Error
+            }
         }
     }
 
-    /**@Post backEnd save - TODO:inserire mittenteId=utenteLoggato */
+    /**@Post backEnd save  */
     fun sendMessage(message: String, venditoreId: Long) {
-        val m=Message(testo=message, mittenteId = 1, destinatarioId = venditoreId)
+        val m=Message(testo=message, mittenteId = Service.accessId, destinatarioId = venditoreId)//TODO:inserire mittenteId=utenteLoggato
         viewModelScope.launch {
             uiStateSendMessage = try {
                 Service.retrofitService.saveMessage(m)

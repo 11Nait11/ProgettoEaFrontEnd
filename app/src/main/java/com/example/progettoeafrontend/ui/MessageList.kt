@@ -45,9 +45,7 @@ import com.google.gson.Gson
 @Composable
 fun MessageList(uiState:UiStateMessage, viewModel: viewModelMessage, navController: NavController, modifier: Modifier = Modifier){
 
-    Text(text = "Benvenoob sono Message")
-
-    if(uiState== UiStateMessage.Loading || uiState== UiStateMessage.Error) // todo: or lista vuota
+    if(uiState== UiStateMessage.Loading || uiState== UiStateMessage.Error)
         viewModel.getMessages()
 
     when(uiState){
@@ -109,7 +107,6 @@ fun anteprimaMessaggi(key: Pair<String, String>, value: MutableList<Message>, na
                 .padding(end = 8.dp)
         ) {
             Text(
-//                todo if(mittente!=da loggato) text=mittente else destinatario
                 text = key.second,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.primary
