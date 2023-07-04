@@ -6,7 +6,7 @@
     <string name="message">Message\n</string>
     <string name="account">Account\n</string>
     <string name="loading">Loading\n</string>
-    <string name="loading_failed">Errore di caricamento </string>
+    <string name="failed">Errore ripetere procedura </string>
     <string name="prodotto">Prodotto\n</string>
     <string name="img_prodotto">Image Product\n</string>
     <string name="productDetail">dettagli prodotto</string>

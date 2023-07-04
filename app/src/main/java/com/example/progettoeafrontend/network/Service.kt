@@ -7,6 +7,7 @@ import com.example.progettoeafrontend.model.Product
 import com.example.progettoeafrontend.model.User
 import com.example.progettoeafrontend.screenApp
 import com.example.progettoeafrontend.ui.LoginScreen
+import com.example.progettoeafrontend.ui.goToHome
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
@@ -25,7 +26,32 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import java.util.Base64
 
-private const val BASE_URL = "http://192.168.1.7:8080/"
+
+//evita inserimento header manualemente nelle request
+class TokenInterceptor : Interceptor {
+    override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
+        val originalRequest: Request = chain.request()
+        val accessToken = Service.accessToken
+        Log.d("interceptor", "access token: $accessToken")
+
+
+        /*** Add the access token to the header*/
+        val requestWithToken: Request = if (accessToken != null)
+        {
+            originalRequest.newBuilder()
+                .header("Authorization", "$accessToken")
+                .build()
+        } else { originalRequest }
+
+
+        val response: okhttp3.Response = chain.proceed(requestWithToken)
+        return response
+
+    }
+}
+
+//private const val BASE_URL = "https://192.168.1.7:8443/"//https
+private const val BASE_URL = "http://192.168.1.7:8080/"//http
 private val json = Json { ignoreUnknownKeys = true }
 private val okHttpClient = OkHttpClient.Builder()
     .addInterceptor(TokenInterceptor())
@@ -36,6 +62,26 @@ private val retrofit = Retrofit.Builder()
     .baseUrl(BASE_URL)
     .client(okHttpClient)
     .build()
+
+object Service {
+    val retrofitService: AppService by lazy {
+        retrofit.create(AppService::class.java)
+    }
+    var accessToken: String? = null
+    var refreshToken: String? = null
+    var accessId:Long=0L
+    var accessNome:String?=null
+
+    suspend fun refreshToken(){
+        accessToken=refreshToken
+        val headers=retrofitService.sendRefreshToken().headers()
+        refreshToken = "Bearer "+headers.get("refresh_token")
+        accessToken = "Bearer "+headers.get("access_token")
+        Log.d("refreshToken ","Nuovo accessToken: $accessToken")
+
+    }
+}
+
 
 interface AppService {
     @POST("login")
@@ -59,44 +105,13 @@ interface AppService {
     @GET("utente-api/utente/{username}")
     suspend fun getUtente(@Path("username") username :String):User
 
+    @GET("utente-api/refreshToken")
+    suspend fun sendRefreshToken():Response<Unit>
+
+
     @GET("image-api/images")
     suspend fun getImages(): List<Image>
 }
 
-object Service {
-    val retrofitService: AppService by lazy {
-        retrofit.create(AppService::class.java)
-    }
-    var accessToken: String? = null
-    var accessId:Long=0L
-    var accessNome:String?=null
-}
-
-//evita inserimento header manualemente nelle request
-class TokenInterceptor : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
-        val originalRequest: Request = chain.request()
-        val accessToken = Service.accessToken
-        Log.d("Interceptor", "Chiamo Interceptor: $accessToken")
-
-        // Add the access token to the header
-        val requestWithToken: Request = if (accessToken != null) {
-            originalRequest.newBuilder()
-                .header("Authorization", "$accessToken")
-                .build()
-        } else {
-            originalRequest
-        }
 
 
-            val response: okhttp3.Response = chain.proceed(requestWithToken)
-            if(response.code==403){
-                Log.e("Interceptor", "scaduto")
-//                goToLogin()
-
-            }
-
-            return response
-
-    }
-}

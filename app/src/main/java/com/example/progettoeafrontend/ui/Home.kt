@@ -55,7 +55,7 @@ fun Home(uiState:UiStateProduct, navController : NavController,
          modifier: Modifier = Modifier, )
 {
 
-    if(uiState==UiStateProduct.Loading || uiState==UiStateProduct.Error) // todo: or lista vuota
+    if(uiState==UiStateProduct.Loading || uiState==UiStateProduct.Error)
         viewModel.getProducts()
 
     when(uiState){
@@ -115,7 +115,7 @@ fun ErrorScreen(modifier: Modifier = Modifier,viewModel: ViewModelProduct) {
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.padding(16.dp)
         ) {
-            Text(stringResource(R.string.loading_failed))
+            Text(stringResource(R.string.failed))
             IconButton(onClick = { viewModel.refresh() }) {
                 Icon(Icons.Default.Refresh, contentDescription = stringResource(id = R.string.refresh))
             }

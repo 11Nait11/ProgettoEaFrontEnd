@@ -10,6 +10,7 @@ import com.example.progettoeafrontend.model.Product
 import com.example.progettoeafrontend.network.Service
 
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import java.io.IOException
 
 
@@ -63,6 +64,16 @@ class ViewModelProduct : ViewModel(){
                 val listResult = Service.retrofitService.getProducts()
                 UiStateProduct.Success(resultList = listResult)
             } catch (e: IOException) { UiStateProduct.Error }
+              catch (e: HttpException) {
+                  if(e.code()==401){
+                      Log.d("refreshToken","refreshToken 401")
+                      Service.refreshToken()
+                      setCompratoFalse()
+                      UiStateProduct.Error
+
+                  }
+                  else
+                  UiStateProduct.Error }
         }
     }
 
@@ -71,7 +82,16 @@ class ViewModelProduct : ViewModel(){
                 uiStateProduct = try {
                     Service.retrofitService.deleteProduct(idProd)
                     UiStateProduct.Loading
-                } catch (e: IOException) { UiStateProduct.Error }
+                }
+                catch (e: IOException) { UiStateProduct.Error }
+                catch (e: HttpException) {
+                    if(e.code()==401){
+                        Log.d("refreshToken","refreshToken 401")
+                        Service.refreshToken()
+                        UiStateProduct.Error
+                    }
+                    else
+                        UiStateProduct.Error }
             }
         Log.d("DELETE", "Porodotto Cancellato " +idProd)
     }

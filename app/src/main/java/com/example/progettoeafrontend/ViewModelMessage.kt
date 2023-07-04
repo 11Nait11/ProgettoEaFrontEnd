@@ -43,7 +43,7 @@ class viewModelMessage : ViewModel(){
             val map: MutableMap<Pair<String, String>, MutableList<Message>> = mutableMapOf()
 
             uiStateMessage = try {
-                val userMessageList = Service.retrofitService.getMessages(Service.accessId)//TODO:sosistuire con utenteLoggato
+                val userMessageList = Service.retrofitService.getMessages(Service.accessId)
                /**ragruppa messaggi stessa conversazione*/
                 for(userMessage  in userMessageList)
                 {
@@ -77,6 +77,7 @@ class viewModelMessage : ViewModel(){
                 Service.retrofitService.saveMessage(m)
                 UiStateSendMessage.Success
             } catch (e: IOException) { UiStateSendMessage.Error }
+            catch (e: HttpException) { UiStateSendMessage.Error }
         }
     }
 

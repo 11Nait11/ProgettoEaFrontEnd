@@ -137,7 +137,7 @@ fun ErrorScreenMessage(modifier: Modifier = Modifier,viewModel: viewModelMessage
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.padding(16.dp)
         ) {
-            Text(stringResource(R.string.loading_failed))
+            Text(stringResource(R.string.failed))
             IconButton(onClick = { viewModel.setLoadingMessageState() }) {
                 Icon(Icons.Default.Refresh, contentDescription = stringResource(id = R.string.refresh))
             }

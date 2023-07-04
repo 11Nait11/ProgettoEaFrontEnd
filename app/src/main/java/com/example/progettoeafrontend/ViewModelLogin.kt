@@ -51,17 +51,18 @@ class ViewModelLogin : ViewModel(){
     fun sendLogin() {
         viewModelScope.launch {
             uiStateLogin = try {
-                val credentials = "$usernameState:$passwordState"
-                var credentials64 = Base64.encodeToString(credentials.toByteArray(), Base64.DEFAULT).trim()
-                credentials64="Basic "+credentials64
-                val response=Service.retrofitService.login(credentials64)
-                val headers=response.headers()
-                val accessToken = headers.get("access_token")
-                val refreshToken = headers.get("refresh_token")
 
-                if (accessToken != null) {
-                    Service.accessToken = "Bearer "+accessToken
-                    Log.d("login", "accessToken salvato : $accessToken")
+                val credentials = "$usernameState:$passwordState"
+                var credentials64 ="Basic "+Base64.encodeToString(credentials.toByteArray(), Base64.DEFAULT).trim()
+
+
+                val headers=Service.retrofitService.login(credentials64).headers()
+                Service.refreshToken = "Bearer "+headers.get("refresh_token")
+                Service.accessToken = "Bearer "+headers.get("access_token")
+
+                if (Service.accessToken != null) {
+                    Log.d("login", "accessToken salvato : $Service.accessToken")
+                    //popola la pagina account
                     getUser()
                     UiStateLogin.Success
                 } else {
@@ -69,13 +70,12 @@ class ViewModelLogin : ViewModel(){
                     UiStateLogin.Error
                 }
 
-            } catch (e: IOException) {
-                UiStateLogin.Error
-            } catch (e: HttpException) {
-                UiStateLogin.Error
             }
+            catch (e: IOException) { UiStateLogin.Error }
+            catch (e: HttpException) { UiStateLogin.Error }
         }
     }
+
 
     fun getUser()
     {

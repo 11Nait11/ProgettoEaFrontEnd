@@ -2,6 +2,7 @@ package com.example.progettoeafrontend.ui
 
 import android.app.Activity
 import android.util.Base64
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -236,9 +237,10 @@ private fun alert(
             pagamentoScelto.value=PaymentFactory.getImp().paga( product.prezzo) //ritorna una stringa
             viewModel.deleteProduct(product.id)
         }
-        catch (e: PaymentFailException) {
-            pagamentoSceltoError.value = "${e.message}"
-        }
+        catch (e: PaymentFailException) { pagamentoSceltoError.value = "${e.message}" }
+        catch (e: SecurityException) {
+            Log.d("exception","dentro")
+            pagamentoSceltoError.value = "${e.message}"}
     }
 
     /**visualizza Messaggio di avvenuto pagamento o di errore */
