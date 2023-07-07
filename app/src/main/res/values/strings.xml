@@ -31,4 +31,6 @@
     <string name="dettagliMessaggio">Dettagli del messaggio</string>
     <string name="articoliVendita">Articoli in vendita</string>
     <string name="login">img_login</string>
+    <string name="congratulazioni">Congratulazione</string>
+    <string name="registrazioneOK">Ora puoi accedere con le tue nuove credenziali!!!</string>
 </resources>

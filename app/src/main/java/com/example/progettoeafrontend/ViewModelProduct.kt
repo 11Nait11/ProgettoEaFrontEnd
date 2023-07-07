@@ -13,7 +13,11 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 
-
+sealed interface UiStateProductAdd {
+    data class Success (val resultList: List<Any>,) : UiStateProductAdd
+    object Error : UiStateProductAdd
+    object Loading : UiStateProductAdd
+}
 sealed interface UiStateProduct {
     data class Success (val resultList: List<Any>,) : UiStateProduct
     object Error : UiStateProduct
@@ -25,14 +29,13 @@ sealed interface UiStateProductDetail {
     object Loading : UiStateProductDetail
 }
 
+
 class ViewModelProduct : ViewModel(){
 
     var uiStateProduct: UiStateProduct by mutableStateOf(UiStateProduct.Loading)
         private set
     var uiStateProductDetail: UiStateProductDetail by mutableStateOf(UiStateProductDetail.Loading)
         private set
-
-
     var comprato by  mutableStateOf(false)
         private set
 
@@ -44,12 +47,10 @@ class ViewModelProduct : ViewModel(){
     fun setCompratoTrue(){ comprato=true }
     fun setCompratoFalse(){ comprato=false }
 
-
     /**navigazione info prodotto */
     fun setUiStateProductDetail(product: Product){
         uiStateProductDetail=UiStateProductDetail.Success(product)
     }
-
 
     /**ricarica prodotto da backEnd*/
     fun refresh() {
@@ -57,26 +58,25 @@ class ViewModelProduct : ViewModel(){
         getProducts()
     }
 
-
+    /**ottiene tutti i prodotti*/
     fun getProducts() {
         viewModelScope.launch {
             uiStateProduct = try {
                 val listResult = Service.retrofitService.getProducts()
                 UiStateProduct.Success(resultList = listResult)
             } catch (e: IOException) { UiStateProduct.Error }
-              catch (e: HttpException) {
-                  if(e.code()==401){
-                      Log.d("refreshToken","refreshToken 401")
-                      Service.refreshToken()
-                      setCompratoFalse()
-                      UiStateProduct.Error
-
-                  }
-                  else
-                  UiStateProduct.Error }
+            catch (e: HttpException) {
+                if(e.code()==401){
+                    Log.d("refreshToken","refreshToken 401")
+                    Service.refreshToken()
+                    UiStateProduct.Error
+                }
+                else
+                    UiStateProduct.Error }
         }
     }
 
+    /**cancella prodotto dal db (usato anche in caso di vendita prodotto)*/
     fun deleteProduct(idProd: Long) {
             viewModelScope.launch {
                 uiStateProduct = try {
@@ -98,15 +98,15 @@ class ViewModelProduct : ViewModel(){
 
 
 
+
+
+
 /**logica vecchia - da rivedere*/
     fun getImages() {
 //    avvio operaz. asyn per getImages()
         viewModelScope.launch {
-            Log.d("Pippo","getimages")
             uiStateProduct = try {
-                Log.d("Pippo","entroImage")
                 val listResult = Service.retrofitService.getImages()
-                Log.d("Pippo","ottengoImage")
                 UiStateProduct.Success(resultList = listResult)
             } catch (e: IOException) { UiStateProduct.Error }
         }
@@ -114,14 +114,10 @@ class ViewModelProduct : ViewModel(){
 
     /**get singolo prodotto forse non necessaria - da rivedere */
     fun getProductDetail(prodottoId:Long){
-//        gestire diversamente ?
         uiStateProductDetail=UiStateProductDetail.Loading
         viewModelScope.launch {
-            Log.d("Pippo","getProd")
             uiStateProductDetail = try {
-                Log.d("Pippo","entroPRdo")
                 val result = Service.retrofitService.getProduct(prodottoId)
-                Log.d("Pippo","ottengoProd")
                 UiStateProductDetail.Success(result= result)
             } catch (e: IOException) { UiStateProductDetail.Error }
         }

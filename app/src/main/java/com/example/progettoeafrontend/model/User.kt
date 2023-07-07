@@ -3,6 +3,7 @@ package com.example.progettoeafrontend.model
 import kotlinx.serialization.Serializable
 
 
+//usare stessi nomi var del backend dto
 @Serializable
 data class User(
     val id: Long,

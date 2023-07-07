@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.progettoeafrontend.ui.Account
 import com.example.progettoeafrontend.ui.LoginScreen
 import com.example.progettoeafrontend.ui.theme.ProgettoEaFrontEndTheme
-import com.example.tutorialcompose2.Registrazione
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-//                    Registrazione()
+//
                     LoginScreen()
 //                    Account()
 //                    screenApp()

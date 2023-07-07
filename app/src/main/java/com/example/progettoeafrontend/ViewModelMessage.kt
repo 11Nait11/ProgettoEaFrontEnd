@@ -1,5 +1,6 @@
 package com.example.progettoeafrontend
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -44,9 +45,8 @@ class viewModelMessage : ViewModel(){
 
             uiStateMessage = try {
                 val userMessageList = Service.retrofitService.getMessages(Service.accessId)
-               /**ragruppa messaggi stessa conversazione*/
-                for(userMessage  in userMessageList)
-                {
+                /**ragruppa messaggi stessa conversazione*/
+                for (userMessage in userMessageList) {
                     /**costruisce chiave  1,2 = 2,1 (stessa Conversazione)*/
                     val key: Pair<String, String> =
                         if (userMessage.mittenteNome == Service.accessNome) //TODO:sosistuire con utenteLoggato
@@ -64,27 +64,49 @@ class viewModelMessage : ViewModel(){
             } catch (e: IOException) {
                 UiStateMessage.Error
             } catch (e: HttpException) {
-                UiStateMessage.Error
+                if (e.code() == 401) {
+                    Log.d("refreshToken", "refreshToken 401")
+                    Service.refreshToken()
+                    UiStateMessage.Error
+                } else
+                    UiStateMessage.Error
             }
         }
     }
 
-    /**@Post backEnd save  */
-    fun sendMessage(message: String, venditoreId: Long) {
-        val m=Message(testo=message, mittenteId = Service.accessId, destinatarioId = venditoreId)//TODO:inserire mittenteId=utenteLoggato
-        viewModelScope.launch {
-            uiStateSendMessage = try {
-                Service.retrofitService.saveMessage(m)
-                UiStateSendMessage.Success
-            } catch (e: IOException) { UiStateSendMessage.Error }
-            catch (e: HttpException) { UiStateSendMessage.Error }
+        /**@Post backEnd save  */
+        fun sendMessage(message: String, venditoreId: Long) {
+            val m = Message(
+                testo = message,
+                mittenteId = Service.accessId,
+                destinatarioId = venditoreId
+            )//TODO:inserire mittenteId=utenteLoggato
+            viewModelScope.launch {
+                uiStateSendMessage = try {
+                    Service.retrofitService.saveMessage(m)
+                    UiStateSendMessage.Success
+                } catch (e: IOException) {
+                    UiStateSendMessage.Error
+                } catch (e: HttpException) {
+                    if (e.code() == 401) {
+                        Log.d("refreshToken", "refreshToken 401")
+                        Service.refreshToken()
+                        UiStateSendMessage.Error
+                    } else
+                        UiStateSendMessage.Error
+                }
+            }
         }
+
+
+        /**ricontatta backEnd per ottenere messaggi*/
+        fun setLoadingMessageState() {
+            uiStateMessage = UiStateMessage.Loading
+        }
+
+        fun setLoadingSendMessageState() {
+            uiStateSendMessage = UiStateSendMessage.Loading
+        }
+
+
     }
-
-
-    /**ricontatta backEnd per ottenere messaggi*/
-    fun setLoadingMessageState() { uiStateMessage=UiStateMessage.Loading}
-    fun setLoadingSendMessageState() { uiStateSendMessage=UiStateSendMessage.Loading }
-
-
-}

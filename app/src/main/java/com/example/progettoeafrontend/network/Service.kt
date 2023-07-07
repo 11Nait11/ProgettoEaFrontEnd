@@ -5,26 +5,20 @@ import com.example.progettoeafrontend.model.Image
 import com.example.progettoeafrontend.model.Message
 import com.example.progettoeafrontend.model.Product
 import com.example.progettoeafrontend.model.User
-import com.example.progettoeafrontend.screenApp
-import com.example.progettoeafrontend.ui.LoginScreen
-import com.example.progettoeafrontend.ui.goToHome
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import retrofit2.HttpException
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.http.Body
 import retrofit2.http.DELETE
-import retrofit2.http.Field
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
-import java.util.Base64
 
 
 //evita inserimento header manualemente nelle request
@@ -39,7 +33,7 @@ class TokenInterceptor : Interceptor {
         val requestWithToken: Request = if (accessToken != null)
         {
             originalRequest.newBuilder()
-                .header("Authorization", "$accessToken")
+                .header("Authorization", "Bearer $accessToken")
                 .build()
         } else { originalRequest }
 
@@ -73,7 +67,7 @@ object Service {
     var accessNome:String?=null
 
     suspend fun refreshToken(){
-        accessToken=refreshToken
+        accessToken="Bearer $refreshToken"
         val headers=retrofitService.sendRefreshToken().headers()
         refreshToken = "Bearer "+headers.get("refresh_token")
         accessToken = "Bearer "+headers.get("access_token")
@@ -108,9 +102,12 @@ interface AppService {
     @GET("utente-api/refreshToken")
     suspend fun sendRefreshToken():Response<Unit>
 
-
     @GET("image-api/images")
     suspend fun getImages(): List<Image>
+
+    @POST("utente-api/salva")
+    suspend fun sendRegister(@Body user: User)
+
 }
 
 

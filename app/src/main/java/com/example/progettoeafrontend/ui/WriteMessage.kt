@@ -80,7 +80,7 @@ fun WriteMessage(
 fun goToHome(navController: NavController, viewModelMessage: viewModelMessage) {
     viewModelMessage.setLoadingSendMessageState()
     viewModelMessage.setLoadingMessageState()
-    navController.navigate(ScreenApp.Home.name)
+    navController.navigate(ScreenApp.Message.name)
 }
 
 /**atterro sulla home se il messaggio è stato salvato correttamente*/
