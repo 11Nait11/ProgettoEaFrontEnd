@@ -58,31 +58,6 @@ fun Account(uiState:UiStateAccount, viewModelLogin: ViewModelLogin) {
 @Composable
 fun ResultScreenAccount(utente: User) {
 
-    Row(verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .clip(RoundedCornerShape(20.dp))
-            .clickable { }
-            .fillMaxWidth()
-            .height(100.dp)
-    ) {
-        Icon(
-            imageVector = Icons.Filled.AccountCircle,
-            contentDescription = null,
-            modifier = Modifier
-                .size(60.dp)
-                .padding(8.dp)
-                .clip(RoundedCornerShape(20.dp)),
-            tint = MaterialTheme.colorScheme.primary
-        )
-
-        Text(
-            text = "Info Utente",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.primary
-        )
-
-    }
-
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
@@ -91,6 +66,33 @@ fun ResultScreenAccount(utente: User) {
         verticalArrangement = Arrangement.Center
     ){
         item{
+
+            Row(verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(20.dp))
+                    .clickable { }
+                    .fillMaxWidth()
+                    .height(100.dp)
+                    .padding(start = 50.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.AccountCircle,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(80.dp)
+                        .padding(8.dp)
+                        .clip(RoundedCornerShape(20.dp)),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+
+                Text(
+                    text = "Info Utente",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 30.sp
+                )
+
+            }
+
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
@@ -106,52 +108,23 @@ fun ResultScreenAccount(utente: User) {
 
                 Spacer(modifier = Modifier.height(5.dp))
 
-                Text(text = "Nome:", fontSize = 25.sp, fontWeight = FontWeight.Bold)
-                Text(text = utente.nome, fontWeight = FontWeight.Bold, fontSize = 20.sp)
+                Text(text = "Nome:", fontSize = 18.sp, modifier = Modifier.align(Alignment.Start).padding(start = 12.dp))
+                Text(text = utente.nome, fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.align(Alignment.Start).padding(start = 60.dp))
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+
+                Text(text = "Cognome:", fontSize = 18.sp, modifier = Modifier.align(Alignment.Start).padding(start = 12.dp))
+                Text(text = utente.cognome, fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.align(Alignment.Start).padding(start = 60.dp))
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+
+                Text(text = "Mail:", fontSize = 18.sp, modifier = Modifier.align(Alignment.Start).padding(start = 12.dp))
+                Text(text = utente.email, fontWeight = FontWeight.Bold, fontSize = 20.sp, modifier = Modifier.align(Alignment.Start).padding(start = 60.dp))
 
                 Spacer(modifier = Modifier.height(5.dp))
 
-                Divider(modifier = Modifier
-                    .height(5.dp),
-                    color = Color(0xFF007782)
-                )
-
-                Spacer(modifier = Modifier.height(5.dp))
-
-                Text(text = "Cognome:", fontSize = 25.sp, fontWeight = FontWeight.Bold)
-                Text(text = utente.cognome, fontWeight = FontWeight.Bold, fontSize = 20.sp)
-
-                Spacer(modifier = Modifier.height(5.dp))
-
-                Divider(modifier = Modifier
-                    .height(5.dp),
-                    color = Color(0xFF007782)
-                )
-
-                Spacer(modifier = Modifier.height(5.dp))
-
-                Text(text = "Mail:", fontSize = 25.sp, fontWeight = FontWeight.Bold)
-                Text(text = utente.email, fontWeight = FontWeight.Bold, fontSize = 20.sp)
-
-
-
-
-                Spacer(modifier = Modifier.height(5.dp))
-
-                Divider(modifier = Modifier
-                    .height(5.dp),
-                    color = Color(0xFF007782)
-                )
-
-
-
-                Divider(modifier = Modifier
-                    .height(5.dp),
-                    color = Color(0xFF007782)
-                )
-
-
-                Spacer(modifier = Modifier.height(5.dp))
 
             }
 

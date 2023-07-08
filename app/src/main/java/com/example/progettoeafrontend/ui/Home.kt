@@ -12,8 +12,10 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -35,6 +37,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.text.font.FontWeight
 
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -87,13 +90,20 @@ fun  LoadingScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun ResultScreen(products: List<Product>, modifier: Modifier = Modifier, navController : NavController,viewModel: ViewModelProduct) {
-    Column() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Text(text = stringResource(id = R.string.articoliVendita), fontSize = 20.sp)
+        Text(text = stringResource(id = R.string.articoliVendita), fontSize = 20.sp, fontWeight = FontWeight.Bold)
+
+        Spacer(modifier = Modifier.height(20.dp))
+
         LazyVerticalGrid(
             columns = GridCells.Adaptive(150.dp),
-            modifier = modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(4.dp)
+            modifier = modifier.fillMaxWidth()
         ) {
             items(items = products, key = { product -> product.id }) { product ->
                 Box(
@@ -155,14 +165,15 @@ fun photoCard(product: Product, modifier: Modifier = Modifier) {
                 )
             }
 
-                Text(text = product.nomeProdotto, style = MaterialTheme.typography.bodyMedium)
+                Text(text = product.nomeProdotto, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Bold)
 
             /**info prodotto*/
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Spacer(modifier = Modifier.width(4.dp)) // Spazio tra l'icona e il testo
+                Spacer(modifier = Modifier.width(5.dp)) // Spazio tra l'icona e il testo
                 Text(
                     text = product.prezzo.toString(),
-                    style = MaterialTheme.typography.bodySmall
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold
                 )
                 Icon(
                     modifier = Modifier

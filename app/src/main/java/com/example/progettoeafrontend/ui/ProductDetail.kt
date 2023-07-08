@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -35,6 +36,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -75,12 +77,18 @@ fun ResultScreenProduct(product : Product, modifier: Modifier = Modifier, navCon
 
 @Composable
 fun Carousel(product: Product, viewModel: ViewModelProduct, navController: NavController) {
-    Text(text = "Dettagli Annuncio", fontSize = 30.sp)
+
 
     /** Immagine Principale*/
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(top = 40.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 40.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+        Text(text = "Dettagli Annuncio", fontSize = 30.sp, fontWeight = FontWeight.Bold)
+
         LazyRow(
             modifier = Modifier.weight(1f),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -108,14 +116,16 @@ fun Carousel(product: Product, viewModel: ViewModelProduct, navController: NavCo
             }
         }
 
+        Spacer(modifier = Modifier.height(16.dp))
 
         /** button ContattaVenditore + Compra */
-        Spacer(modifier = Modifier.height(16.dp))
         Row() {
 
             /** Contatta */
             Button(
-                onClick = { goToWriteMessage(navController,product.venditoreId,product.venditoreNome) }) {
+                onClick = { goToWriteMessage(navController,product.venditoreId,product.venditoreNome) },
+                colors = ButtonDefaults.buttonColors(Color(0xFF007782))
+                ) {
                 Icon(
                     Icons.Default.Email,
                     contentDescription = stringResource(id = R.string.sendMex),
@@ -125,14 +135,18 @@ fun Carousel(product: Product, viewModel: ViewModelProduct, navController: NavCo
                     text = stringResource(id = R.string.sendMex),
                     textAlign = TextAlign.Center,
                     overflow = TextOverflow.Visible,
-                    modifier = Modifier.padding(start = 8.dp)
+                    modifier = Modifier.padding(start = 8.dp),
+                    color = Color.White
                 )
             }
+
             Spacer(modifier = Modifier.height(16.dp))
 
             /** Compra */
             Button(
-                onClick = { viewModel.setCompratoTrue() }) {
+                onClick = { viewModel.setCompratoTrue() },
+                colors = ButtonDefaults.buttonColors(Color(0xFF007782))
+                ) {
                 Icon(
                     painterResource(id = R.drawable.pay),
                     contentDescription = stringResource(id = R.string.cart),
@@ -142,7 +156,8 @@ fun Carousel(product: Product, viewModel: ViewModelProduct, navController: NavCo
                     text = stringResource(id = R.string.acquista),
                     textAlign = TextAlign.Center,
                     overflow = TextOverflow.Visible,
-                    modifier = Modifier.padding(start = 8.dp)
+                    modifier = Modifier.padding(start = 8.dp),
+                    color = Color.White
                 )
 
             }
@@ -155,52 +170,52 @@ fun Carousel(product: Product, viewModel: ViewModelProduct, navController: NavCo
             item {
                 Divider(modifier = Modifier
                     .fillMaxWidth()
-                    .height(25.dp), color = Color(0xFF007782)
+                    .height(20.dp), color = Color(0xFF007782)
                 )
 
                 //Costi Spedizione
                 Spacer(modifier = Modifier.height(5.dp))
-                Text(text = "Spedizione: ", fontSize = 20.sp, modifier = Modifier.padding(start = 5.dp))
+                Text(text = "Spedizione: ", fontSize = 20.sp, modifier = Modifier.padding(start = 5.dp), fontWeight = FontWeight.Bold)
                 Text(text = "Tutte le spedizioni sono gratuite nel nostro sito", modifier = Modifier.padding(start = 5.dp))
                 Spacer(modifier = Modifier.height(5.dp))
 
                 Divider(modifier = Modifier
                     .fillMaxWidth()
-                    .height(25.dp), color = Color(0xFF007782)
+                    .height(20.dp), color = Color(0xFF007782)
                 )
 
                 //Desrizione Articolo
                 Spacer(modifier = Modifier.height(5.dp))
-                Text(text = "Descrizione: ", fontSize = 20.sp, modifier = Modifier.padding(start = 5.dp))
+                Text(text = "Descrizione: ", fontSize = 20.sp, modifier = Modifier.padding(start = 5.dp), fontWeight = FontWeight.Bold)
                 Text(text = "descriptions", modifier = Modifier.padding(start = 5.dp))
                 Spacer(modifier = Modifier.height(5.dp))
 
 
                 Divider(modifier = Modifier
                     .fillMaxWidth()
-                    .height(25.dp), color = Color(0xFF007782)
+                    .height(20.dp), color = Color(0xFF007782)
                 )
 
                 //Prezzo del Prodotto
                 Spacer(modifier = Modifier.height(5.dp))
-                Text(text = "Prezzo: ", fontSize = 20.sp, modifier = Modifier.padding(start = 5.dp))
+                Text(text = "Prezzo: ", fontSize = 20.sp, modifier = Modifier.padding(start = 5.dp), fontWeight = FontWeight.Bold)
                 Text(text = "${product.prezzo} €", modifier = Modifier.padding(start = 5.dp))
                 Spacer(modifier = Modifier.height(5.dp))
 
                 Divider(modifier = Modifier
                     .fillMaxWidth()
-                    .height(25.dp), color = Color(0xFF007782)
+                    .height(20.dp), color = Color(0xFF007782)
                 )
 
                 //Recensione più vista
                 Spacer(modifier = Modifier.height(5.dp))
-                Text(text = "Recensione: ", fontSize = 20.sp, modifier = Modifier.padding(start = 5.dp))
+                Text(text = "Recensione: ", fontSize = 20.sp, modifier = Modifier.padding(start = 5.dp), fontWeight = FontWeight.Bold)
                 Text(text = "reviews", modifier = Modifier.padding(start = 5.dp))
                 Spacer(modifier = Modifier.height(5.dp))
 
                 Divider(modifier = Modifier
                     .fillMaxWidth()
-                    .height(25.dp), color = Color(0xFF007782)
+                    .height(20.dp), color = Color(0xFF007782)
                 )
             }
 
@@ -266,11 +281,6 @@ private fun alert(
         modifier = modifier,
 
         /**button di uscita*/
-        dismissButton = {
-            TextButton(onClick = backToHome) {
-                Text(text = "Esci")
-            }
-        },
         confirmButton = {
             TextButton(onClick = backToHome) {
                 Text(text = "Torna alla Home")

@@ -132,7 +132,8 @@ fun Corpo(viewModelLogin: ViewModelLogin){
         Text(
             text = "Vendi vestiti di seconda mano completamente gratis",
             fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
         )
 
         Spacer(modifier = Modifier.height(30.dp))
@@ -184,7 +185,8 @@ fun Corpo(viewModelLogin: ViewModelLogin){
             colors = ButtonDefaults.buttonColors(Color(0xFF007782))
         ) {
             Text(
-                text = "Iscriviti a Vinted", color = Color.White,
+                text = "Iscriviti a Vinted",
+                color = Color.White,
                 fontSize = 18.sp,
             )
         }

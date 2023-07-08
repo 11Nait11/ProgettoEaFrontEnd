@@ -114,7 +114,7 @@ fun LoadingScreenAdd(viewModelProduct: ViewModelProduct) {
             }
 
 
-            /**legge immagini dal archivio cell*/
+            /*legge immagini dal archivio cell*/
                 val multiplePhotoPick = rememberLauncherForActivityResult(
                     contract = ActivityResultContracts.PickMultipleVisualMedia(),
                     onResult = { viewModelProduct.immagini = it }

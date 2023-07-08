@@ -45,7 +45,7 @@ class TokenInterceptor : Interceptor {
 }
 
 //private const val BASE_URL = "https://192.168.1.7:8443/"//https
-private const val BASE_URL = "http://192.168.1.7:8080/"//http
+private const val BASE_URL = "http://192.168.1.2:8080/"//http
 private val json = Json { ignoreUnknownKeys = true }
 private val okHttpClient = OkHttpClient.Builder()
     .addInterceptor(TokenInterceptor())

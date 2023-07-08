@@ -19,7 +19,7 @@
     <string name="euro">euro</string>
     <string name="refresh">refresh\n</string>
     <string name="messageDetail">message detail\n</string>
-    <string name="sendMex">Contatta Venditore\n</string>
+    <string name="sendMex">Contatta Venditore</string>
     <string name="sendMessage">writemessage\n</string>
     <string name="messaggioNonInviato">Messaggio non Inviato</string>
     <string name="riprova">Riprova</string>
