@@ -90,7 +90,7 @@ fun screenApp() {
                 Search()
             }
             composable(route=ScreenApp.Add.name){
-                Add()
+                Add(viewModelProduct.uiStateProductAdd,navController, viewModelProduct)
             }
             composable(route=ScreenApp.Message.name){
                 MessageList(viewModelMessage.uiStateMessage,viewModelMessage,navController)

@@ -28,6 +28,7 @@ class MainActivity : ComponentActivity() {
                     LoginScreen()
 //                    Account()
 //                    screenApp()
+
                 }
             }
         }

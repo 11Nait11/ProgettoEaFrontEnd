@@ -99,7 +99,7 @@ class viewModelMessage : ViewModel(){
         }
 
 
-        /**ricontatta backEnd per ottenere messaggi*/
+        /**ricontatta backEnd per ottenere eventuali messaggi nuovi*/
         fun setLoadingMessageState() {
             uiStateMessage = UiStateMessage.Loading
         }

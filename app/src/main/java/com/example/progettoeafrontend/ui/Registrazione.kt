@@ -27,6 +27,7 @@ import com.example.progettoeafrontend.UiStateRegister
 import com.example.progettoeafrontend.ViewModelLogin
 
 
+/**raccoglie dati nuovo utente e invia al backEnd per salvare nel db*/
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun registrazione(viewModelLogin: ViewModelLogin) {
@@ -45,16 +46,16 @@ fun registrazione(viewModelLogin: ViewModelLogin) {
     }
 }
 
+/**se la registrazione e' andata a buon fine ritorna alla login */
 @Composable
 fun ResultScreenRegister(viewModelLogin: ViewModelLogin){
     viewModelLogin.goToLoginAfterRegister()
 
 
 }
-@Composable
-fun ErrorScreenRegister(){
-    Text(text = "errore")
-}
+
+
+/**Visualizza form per registrarsi*/
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoadingScreenRegister(viewModelLogin: ViewModelLogin){
@@ -67,6 +68,8 @@ fun LoadingScreenRegister(viewModelLogin: ViewModelLogin){
         verticalArrangement = Arrangement.Center
     ) {
         item {
+
+            /**TextField di registrazione*/
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
@@ -75,7 +78,7 @@ fun LoadingScreenRegister(viewModelLogin: ViewModelLogin){
             ) {
                 Spacer(modifier = Modifier.height(5.dp))
 
-
+                /**Nome*/
                 Text(text = "Nome:", fontSize = 25.sp, fontWeight = FontWeight.Bold)
                 TextField(
                     value = viewModelLogin.firstname,
@@ -92,8 +95,7 @@ fun LoadingScreenRegister(viewModelLogin: ViewModelLogin){
                 )
                 Spacer(modifier = Modifier.height(5.dp))
 
-
-
+                /**Cognome*/
                 Text(text = "Cognome:", fontSize = 25.sp, fontWeight = FontWeight.Bold)
                 TextField(
                     value = viewModelLogin.lastname,
@@ -109,8 +111,7 @@ fun LoadingScreenRegister(viewModelLogin: ViewModelLogin){
                 )
                 Spacer(modifier = Modifier.height(5.dp))
 
-
-
+                /**Email*/
                 Text(text = "Mail:", fontSize = 25.sp, fontWeight = FontWeight.Bold)
                 TextField(
                     value = viewModelLogin.mail,
@@ -126,8 +127,7 @@ fun LoadingScreenRegister(viewModelLogin: ViewModelLogin){
                 )
                 Spacer(modifier = Modifier.height(5.dp))
 
-
-
+                /**Passowrd*/
                 Text(text = "Password:", fontSize = 25.sp, fontWeight = FontWeight.Bold)
                 TextField(
                     value = viewModelLogin.password,
@@ -144,13 +144,12 @@ fun LoadingScreenRegister(viewModelLogin: ViewModelLogin){
 
                 Spacer(modifier = Modifier.height(5.dp))
                 Divider(modifier = Modifier.height(5.dp), color = Color(0xFF007782))
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(10.dp)) }
 
 
-            }
-
-
+            /**Button */
             Column {
+
                 /**registrati button*/
                 Button(
                     onClick = {
@@ -165,9 +164,9 @@ fun LoadingScreenRegister(viewModelLogin: ViewModelLogin){
                     Text(text = "Registrati")
                 }
 
-                /**torna alla login*/
+                /** Ho gia un account*/
                 Button(
-                    onClick = {viewModelLogin.login()},
+                    onClick = {viewModelLogin.setUistateLogin()},
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(Color(0xFF007782))
                 ) {
@@ -180,14 +179,15 @@ fun LoadingScreenRegister(viewModelLogin: ViewModelLogin){
 }
 
 @Composable
-private fun alert(
-//    title:String,
-//    text:String,
-//    onClick: ()->Unit
-    viewModelLogin: ViewModelLogin
-) {
+fun ErrorScreenRegister(){
+    Text(text = "errore")
+}
 
-    /**visualizza Messaggio di avvenuto pagamento o di errore */
+/**Alert se utente inserisce dati non validi */
+@Composable
+private fun alert(viewModelLogin: ViewModelLogin) {
+
+
     AlertDialog(
         onDismissRequest = {},
         title = { Text(text = viewModelLogin.validateInput()[0].field)},
@@ -196,12 +196,11 @@ private fun alert(
                     text = viewModelLogin.validateInput()[0].message,
                     textAlign = TextAlign.Center,
                     overflow = TextOverflow.Visible)
-
         },
 
         /**button di uscita*/
         confirmButton = {
-            TextButton(onClick = { viewModelLogin.showAlertRegister(false) }) {
+            TextButton(onClick = { viewModelLogin.setShowAlertRegister(false) }) {
                 Text(text = "OK")
             }
         }

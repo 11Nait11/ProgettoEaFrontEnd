@@ -2,6 +2,7 @@ package com.example.progettoeafrontend.ui
 
 
 import android.util.Base64
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -55,8 +56,9 @@ fun Home(uiState:UiStateProduct, navController : NavController,
          modifier: Modifier = Modifier, )
 {
 
-    if(uiState==UiStateProduct.Loading || uiState==UiStateProduct.Error)
+    if(uiState==UiStateProduct.Loading || uiState==UiStateProduct.Error) {
         viewModel.getProducts()
+    }
 
     when(uiState){
         is UiStateProduct.Loading -> LoadingScreen(modifier)

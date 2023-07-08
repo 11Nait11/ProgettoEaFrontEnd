@@ -35,6 +35,7 @@ sealed interface UiStateRegister{
 
 class ViewModelLogin : ViewModel(){
 
+    /**tiene traccia dello stato corrente della UI*/
     var uiStateRegister: UiStateRegister by mutableStateOf(UiStateRegister.Loading)
         private set
     var uiStateLogin: UiStateLogin by mutableStateOf(UiStateLogin.Login)
@@ -46,16 +47,20 @@ class ViewModelLogin : ViewModel(){
     /**login*/
     var usernameState by mutableStateOf("")
     var passwordState by mutableStateOf("")
+
     /**registrazione*/
     var firstname by mutableStateOf("")
     var lastname by mutableStateOf("")
     var mail by mutableStateOf("")
     var password by mutableStateOf("")
 
+    /**disabilitano button in caso di campi null di login e register */
     var isLoginEnabled by  mutableStateOf(false)
         private set
     var isRegisterEnabled by  mutableStateOf(false)
         private set
+
+    /**mostrano alert per login e registrazione*/
     var isAlertShowRegister by  mutableStateOf(false)
         private set
     var isAlertShowLogin by  mutableStateOf(false)
@@ -63,19 +68,19 @@ class ViewModelLogin : ViewModel(){
 
     init {}
 
+    /**ritorna alla login se la registrazione e' andata  a buon fine*/
     fun goToLoginAfterRegister(){
-        showAlertLogin(true)
+        setShowAlertLogin(true) //registrazione completata tutto ok
         flush()
         uiStateLogin=UiStateLogin.Login
-
     }
 
+    /**contatta api per salvare nuovo utente*/
     fun sendRegister()
     {
         viewModelScope.launch {
             uiStateRegister = try {
                 val user = User(id = 0, nome = firstname, cognome = lastname, email = mail, password = password)
-                Log.d("login","prima register ")
                 Service.retrofitService.sendRegister(user)
                 UiStateRegister.Success
             }
@@ -85,6 +90,7 @@ class ViewModelLogin : ViewModel(){
     }
 
 
+    /**invia credenzili e se autenticato riceve token*/
     fun sendLogin() {
         viewModelScope.launch {
             uiStateLogin = try {
@@ -119,6 +125,8 @@ class ViewModelLogin : ViewModel(){
         }
     }
 
+
+    /**ottiene utente cercando per username(email)*/
     fun getUser()
     {
             viewModelScope.launch {
@@ -142,33 +150,39 @@ class ViewModelLogin : ViewModel(){
             }
     }
 
-
+    /**ripulisce i campi del form register*/
     fun flush() {
         firstname = ""
         lastname = ""
         mail = ""
         password = ""
     }
+    /**Button (registrati) nella LoginScreen, chiama Registrazione*/
     fun register() {
         uiStateLogin=UiStateLogin.Register
         uiStateRegister=UiStateRegister.Loading
     }
-    fun login(){
+    /**Button (Ho gia un account) da Registrazione ritorna a LoginScreen*/
+    fun setUistateLogin(){
         uiStateLogin=UiStateLogin.Login
     }
-    fun showAlertRegister(v:Boolean){
+
+    /**gestisce la visualizzazione degli alert*/
+    fun setShowAlertRegister(v:Boolean){
         isAlertShowRegister=v
     }
-    fun showAlertLogin(v:Boolean){
+    fun setShowAlertLogin(v:Boolean){
         isAlertShowLogin=v
     }
 
-
+    /** verifica campi username e password*/
     fun canSendButton() {
         val isUsernameNotEmpty = usernameState.isNotEmpty()
         val isPasswordNotEmpty = passwordState.isNotEmpty()
         isLoginEnabled = isUsernameNotEmpty && isPasswordNotEmpty
     }
+
+    /** verifica campi form register*/
     fun canRegisterButton() {
         val a = firstname.isNotEmpty()
         val b = lastname.isNotEmpty()
@@ -177,22 +191,20 @@ class ViewModelLogin : ViewModel(){
         isRegisterEnabled = a && b && c && d
     }
 
+    /**valida email e password nel from register*/
     fun validateInput(): List<ErrorMess> {
         val errors = mutableListOf<ErrorMess>()
         if (!Patterns.EMAIL_ADDRESS.matcher(mail).matches()) {
             errors.add(ErrorMess("Mail", "email non valida"))
-            showAlertRegister(true)
+            setShowAlertRegister(true)
         }
         if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).{8,}$".toRegex())) {
             errors.add(ErrorMess("Password", "La password deve contenere almeno 8 caratteri, una lettera maiuscola e un carattere speciale (!@#%^&+=)"))
-            showAlertRegister(true)
+            setShowAlertRegister(true)
         }
-
-
-
         return errors }
-
 }
+
 
 data class ErrorMess(
     val field: String,

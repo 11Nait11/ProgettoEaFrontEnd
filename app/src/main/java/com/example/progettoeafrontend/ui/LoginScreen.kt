@@ -52,7 +52,6 @@ fun LoginScreen(){
     val viewModelLogin: ViewModelLogin = viewModel()
     viewModelLogin.canSendButton()
 
-    Log.d("pop","vald showLogin : ${viewModelLogin.isAlertShowLogin}")
     if(viewModelLogin.isAlertShowLogin)
         alert(viewModelLogin)
 
@@ -66,16 +65,15 @@ fun LoginScreen(){
     }
 }
 
-
-
-
-
+/**se il login e' avvenuto correttamente visualizza screenApp*/
 @Composable
 fun ResultScreenLogin() { screenApp() }
+
+/**chiama la registrazione se viene cliccato il buttone registrati*/
 @Composable
-fun Register(viewModelLogin:ViewModelLogin){
-    Log.d("pop","register")
-    registrazione(viewModelLogin) }
+fun Register(viewModelLogin:ViewModelLogin){ registrazione(viewModelLogin) }
+
+
 @Composable
 fun LoadingScreenLogin(modifier: Modifier.Companion = Modifier) {
     Box(
@@ -91,34 +89,7 @@ fun LoadingScreenLogin(modifier: Modifier.Companion = Modifier) {
     }
 }
 
-
-@Composable
-fun ErrorScreenLogin(modifier: Modifier = Modifier, viewModelLogin: ViewModelLogin) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .wrapContentSize(Alignment.BottomCenter)
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            Text(
-                text = "Errore di accesso",
-                color = Color.Red,
-                modifier = Modifier.padding(bottom = 8.dp)
-            )
-            Text(
-                text = "Credenziali non valide",
-                color = Color.Red
-            )
-        }
-    }
-    Login(viewModelLogin = viewModelLogin)
-    Spacer(modifier = Modifier.height(16.dp))
-}
-
+/**schermata iniziale di login*/
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Login(viewModelLogin: ViewModelLogin) {
@@ -138,6 +109,8 @@ fun Login(viewModelLogin: ViewModelLogin) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Corpo(viewModelLogin: ViewModelLogin){
+
+    /**immagine schermata iniziale di login*/
     Column(
         modifier = Modifier
             .fillMaxHeight()
@@ -167,8 +140,6 @@ fun Corpo(viewModelLogin: ViewModelLogin){
 
 
         /**INIZIO FORM LOGIN*/
-
-
 
             //username
             TextField(
@@ -224,10 +195,36 @@ fun Corpo(viewModelLogin: ViewModelLogin){
 
 }
 
+/**Credenziali non valide */
+@Composable
+fun ErrorScreenLogin(modifier: Modifier = Modifier, viewModelLogin: ViewModelLogin) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp)
+            .wrapContentSize(Alignment.BottomCenter)
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Text(
+                text = "Errore di accesso",
+                color = Color.Red,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+            Text(
+                text = "Credenziali non valide",
+                color = Color.Red
+            )
+        }
+    }
+    Login(viewModelLogin = viewModelLogin)
+    Spacer(modifier = Modifier.height(16.dp))
+}
 
 
-
-
+/**visualizza messaggio se nuovo utente e' stato correttamente salvato */
 @Composable
 private fun alert(
 //    title:String,
@@ -236,7 +233,6 @@ private fun alert(
     viewModelLogin: ViewModelLogin
 ) {
 
-    /**visualizza Messaggio di avvenuto pagamento o di errore */
     AlertDialog(
         onDismissRequest = {},
         title = { Text(text = stringResource(id = R.string.congratulazioni))},
@@ -250,7 +246,7 @@ private fun alert(
 
         /**button di uscita*/
         confirmButton = {
-            TextButton(onClick = { viewModelLogin.showAlertLogin(false) }) {
+            TextButton(onClick = { viewModelLogin.setShowAlertLogin(false) }) {
                 Text(text = "OK")
             }
         }

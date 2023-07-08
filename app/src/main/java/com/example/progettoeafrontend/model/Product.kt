@@ -7,6 +7,7 @@ data class Product(
     val id: Long,
     val nomeProdotto: String,
     val prezzo: Double,
+    val descrizione: String,
     val venditoreId:Long,
     val venditoreNome:String,
     val images : List<Image>

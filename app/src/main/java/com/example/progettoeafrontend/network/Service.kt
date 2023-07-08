@@ -21,7 +21,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 
-//evita inserimento header manualemente nelle request
+//evita di inserire header manualemente nelle request
 class TokenInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
         val originalRequest: Request = chain.request()
@@ -77,6 +77,7 @@ object Service {
 }
 
 
+
 interface AppService {
     @POST("login")
     suspend fun login(@Header("Authorization") credentials64: String): Response<Unit>
@@ -108,6 +109,8 @@ interface AppService {
     @POST("utente-api/salva")
     suspend fun sendRegister(@Body user: User)
 
+    @POST("prodotto-api/salva")
+    suspend fun sendProduct(@Body p: Product)
 }
 
 
