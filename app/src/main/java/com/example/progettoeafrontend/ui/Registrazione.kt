@@ -127,7 +127,7 @@ fun LoadingScreenRegister(viewModelLogin: ViewModelLogin){
                 )
                 Spacer(modifier = Modifier.height(5.dp))
 
-                /**Passowrd*/
+                /**Password*/
                 Text(text = "Password:", fontSize = 25.sp, fontWeight = FontWeight.Bold)
                 TextField(
                     value = viewModelLogin.password,

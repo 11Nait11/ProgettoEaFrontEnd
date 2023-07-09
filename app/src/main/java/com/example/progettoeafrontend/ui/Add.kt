@@ -134,7 +134,7 @@ fun LoadingScreenAdd(viewModelProduct: ViewModelProduct) {
             }
 
 
-            /*legge immagini dal archivio cell*/
+            //legge immagini dall'archivio del telefono TODO:promeblema con emulatore lista vuota
                 val multiplePhotoPick = rememberLauncherForActivityResult(
                     contract = ActivityResultContracts.PickMultipleVisualMedia(),
                     onResult = { viewModelProduct.immagini = it }
