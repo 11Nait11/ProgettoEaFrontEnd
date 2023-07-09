@@ -137,7 +137,7 @@ class ViewModelProduct : ViewModel(){
                 val image = Image(0L, base64String, 0L)
                 images.add(image) }
         }
-        val product:Product= Product(0L,nomeProdotto,prezzo.toDouble(),"ciao mamma guarda come mi diverto",Service.accessId,Service.accessNome!!,images)
+        val product= Product(0L,nomeProdotto,prezzo.toDouble(),"ciao mamma guarda come mi diverto",Service.accessId,Service.accessNome!!,images)
 
          viewModelScope.launch {
              uiStateProductAdd = try {
@@ -156,6 +156,9 @@ class ViewModelProduct : ViewModel(){
         refresh()
         uiStateProductAdd=UiStateProductAdd.Loading
         immagini=emptyList()
+        nomeProdotto=""
+        prezzo=""
+        isAlertShow=false
         navController.navigate(ScreenApp.Home.name)
 
     }
