@@ -56,9 +56,9 @@ class ViewModelProduct : ViewModel(){
     var isAlertShow by  mutableStateOf(false)
         private set
 //
-//    fun setShowAlertAdd(v:Boolean){
-//        isAlertShow=v
-//    }
+    fun setShowAlertAdd(v:Boolean){
+        isAlertShow=v
+    }
 
     init {getProducts()}
 
@@ -160,6 +160,7 @@ class ViewModelProduct : ViewModel(){
         prezzo=""
         isAlertShow=false
         navController.navigate(ScreenApp.Home.name)
+
 
     }
 

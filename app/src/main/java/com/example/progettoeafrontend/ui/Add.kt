@@ -67,9 +67,8 @@ fun ErrorScreenAdd() {
 
 @Composable
 fun ResultScreenAdd(viewModelProduct: ViewModelProduct, navController: NavHostController) {
+    viewModelProduct.setShowAlertAdd(true)
     viewModelProduct.saveProductSuccess(navController)
-    
-
 
 }
 

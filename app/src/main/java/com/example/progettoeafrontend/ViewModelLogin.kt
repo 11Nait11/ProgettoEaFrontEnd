@@ -70,7 +70,7 @@ class ViewModelLogin : ViewModel(){
 
     /**ritorna alla login se la registrazione e' andata  a buon fine*/
     fun goToLoginAfterRegister(){
-        setShowAlertRegister(true) //registrazione completata tutto ok
+        setShowAlertLogin(true) //registrazione completata tutto ok
         flush()
         uiStateLogin=UiStateLogin.Login
     }
