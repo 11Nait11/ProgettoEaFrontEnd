@@ -13,6 +13,7 @@ import com.example.progettoeafrontend.network.Service
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
+import kotlin.math.log
 
 sealed interface UiStateLogin{
     object Login:UiStateLogin
@@ -70,7 +71,7 @@ class ViewModelLogin : ViewModel(){
 
     /**ritorna alla login se la registrazione e' andata  a buon fine*/
     fun goToLoginAfterRegister(){
-        setShowAlertRegister(true) //registrazione completata tutto ok
+        setShowAlertLogin(true) //registrazione completata tutto ok
         flush()
         uiStateLogin=UiStateLogin.Login
     }
@@ -84,8 +85,13 @@ class ViewModelLogin : ViewModel(){
                 Service.retrofitService.sendRegister(user)
                 UiStateRegister.Success
             }
-            catch (e: IOException) { UiStateRegister.Error }
-            catch (e: HttpException) { UiStateRegister.Error }
+            catch (e: IOException) {
+                Log.d("ex","IOex")
+                UiStateRegister.Error }
+            catch (e: HttpException) {
+                Log.d("ex","HTTPex")
+                UiStateRegister.Error
+            }
         }
     }
 

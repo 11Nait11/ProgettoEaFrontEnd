@@ -67,8 +67,25 @@ fun ErrorScreenAdd() {
 
 @Composable
 fun ResultScreenAdd(viewModelProduct: ViewModelProduct, navController: NavHostController) {
-    viewModelProduct.setShowAlertAdd(true)
-    viewModelProduct.saveProductSuccess(navController)
+    AlertDialog(
+        onDismissRequest = {},
+        title = { Text(text ="Prodotto salvato")},
+        text = {
+            Text(
+                text = "Prodotto salvato con successo",
+                textAlign = TextAlign.Center,
+                overflow = TextOverflow.Visible)
+        },
+
+
+        /**button di uscita*/
+        confirmButton = {
+            TextButton(onClick = {viewModelProduct.saveProductSuccess(navController)}) {
+                Text(text = "OK")
+            }
+        }
+    )
+
 
 }
 
@@ -167,22 +184,6 @@ fun LoadingScreenAdd(viewModelProduct: ViewModelProduct) {
 private fun alertAdd(viewModelProduct: ViewModelProduct) {
 
 
-    AlertDialog(
-        onDismissRequest = {},
-        title = { Text(text ="Prodotto salvato")},
-        text = {
-            Text(
-                text = "Prodotto salvato con successo",
-                textAlign = TextAlign.Center,
-                overflow = TextOverflow.Visible)
-        },
 
-
-        /**button di uscita*/
-        confirmButton = {
-            TextButton(onClick = {  }) {
-            }
-        }
-    )
 }
 
