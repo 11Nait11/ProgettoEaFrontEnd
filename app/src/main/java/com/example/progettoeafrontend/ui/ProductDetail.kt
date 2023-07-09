@@ -209,7 +209,7 @@ fun Carousel(product: Product, viewModel: ViewModelProduct, navController: NavCo
 
                 //Recensione più vista
                 Spacer(modifier = Modifier.height(5.dp))
-                Text(text = "Recensione: ", fontSize = 20.sp, modifier = Modifier.padding(start = 5.dp), fontWeight = FontWeight.Bold)
+                Text(text = "Recensioni: ", fontSize = 20.sp, modifier = Modifier.padding(start = 5.dp), fontWeight = FontWeight.Bold)
                 Text(text = "reviews", modifier = Modifier.padding(start = 5.dp))
                 Spacer(modifier = Modifier.height(5.dp))
 

@@ -3,9 +3,13 @@ package com.example.progettoeafrontend.ui
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -73,8 +77,12 @@ fun ResultScreenAdd(viewModelProduct: ViewModelProduct, navController: NavHostCo
 @Composable
 fun LoadingScreenAdd(viewModelProduct: ViewModelProduct) {
     val contentResolver = LocalContext.current.contentResolver
-    LazyColumn() {
-        item {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .padding(16.dp)
+    ) {
 
             /**nomeProdotto*/
             Text(text = "Prodotto:", fontSize = 25.sp, fontWeight = FontWeight.Bold)
@@ -86,11 +94,14 @@ fun LoadingScreenAdd(viewModelProduct: ViewModelProduct) {
                 keyboardActions = KeyboardActions.Default
 
             )
+
             Spacer(modifier = Modifier.height(5.dp))
+
             Divider(
                 modifier = Modifier.height(5.dp),
                 color = Color(0xFF007782)
             )
+
             Spacer(modifier = Modifier.height(5.dp))
 
             /**Prezzo*/
@@ -103,6 +114,15 @@ fun LoadingScreenAdd(viewModelProduct: ViewModelProduct) {
                 keyboardActions = KeyboardActions.Default
             )
 
+            Spacer(modifier = Modifier.height(5.dp))
+
+            Divider(
+                modifier = Modifier.height(5.dp),
+                color = Color(0xFF007782)
+            )
+
+            Spacer(modifier = Modifier.height(5.dp))
+
             /**button send to API*/
             Button(
                 onClick = { viewModelProduct.sendProduct(contentResolver) },
@@ -110,7 +130,7 @@ fun LoadingScreenAdd(viewModelProduct: ViewModelProduct) {
                 colors = ButtonDefaults.buttonColors(Color(0xFF007782)),
                 enabled = viewModelProduct.isAddEnabled,
             ) {
-                Text(text = "Aggiungi Prodotto")
+                Text(text = "Aggiungi Prodotto", color = Color.White)
             }
 
 
@@ -124,8 +144,9 @@ fun LoadingScreenAdd(viewModelProduct: ViewModelProduct) {
                         PickVisualMediaRequest(
                         ActivityResultContracts.PickVisualMedia.ImageOnly)
                     ) },
+                    colors = ButtonDefaults.buttonColors(Color.White)
                 ) {
-                    Text(text = "Aggiungi immagini")
+                    Text(text = "Aggiungi immagini", color = Color(0xFF007782), fontWeight = FontWeight.Bold)
                 }
 
 
@@ -139,7 +160,7 @@ fun LoadingScreenAdd(viewModelProduct: ViewModelProduct) {
                         )
                     }
                 }
-        }
+
     }
 }
 
@@ -156,6 +177,7 @@ private fun alertAdd(viewModelProduct: ViewModelProduct) {
                 textAlign = TextAlign.Center,
                 overflow = TextOverflow.Visible)
         },
+
 
         /**button di uscita*/
         confirmButton = {
