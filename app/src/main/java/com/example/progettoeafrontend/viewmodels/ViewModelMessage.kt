@@ -1,4 +1,4 @@
-package com.example.progettoeafrontend
+package com.example.progettoeafrontend.viewmodels
 
 import android.util.Log
 import androidx.compose.runtime.getValue
@@ -13,7 +13,8 @@ import retrofit2.HttpException
 import java.io.IOException
 
 sealed interface UiStateMessage {
-    data class Success(val map: MutableMap<Pair<String, String>, MutableList<Message>>) : UiStateMessage
+    data class Success(val map: MutableMap<Pair<String, String>, MutableList<Message>>) :
+        UiStateMessage
     object Error : UiStateMessage
     object Loading : UiStateMessage
 }
@@ -27,10 +28,10 @@ sealed interface UiStateSendMessage {
 
 class viewModelMessage : ViewModel(){
 
-    var uiStateMessage:UiStateMessage by mutableStateOf(UiStateMessage.Loading)
+    var uiStateMessage: UiStateMessage by mutableStateOf(UiStateMessage.Loading)
         private set
 
-    var uiStateSendMessage:UiStateSendMessage by mutableStateOf(UiStateSendMessage.Loading)
+    var uiStateSendMessage: UiStateSendMessage by mutableStateOf(UiStateSendMessage.Loading)
         private set
 
 

@@ -1,4 +1,4 @@
-package com.example.progettoeafrontend
+package com.example.progettoeafrontend.viewmodels
 
 import android.util.Base64
 import android.util.Log
@@ -13,11 +13,10 @@ import com.example.progettoeafrontend.network.Service
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
-import kotlin.math.log
 
 sealed interface UiStateLogin{
-    object Login:UiStateLogin
-    object Register:UiStateLogin
+    object Login: UiStateLogin
+    object Register: UiStateLogin
     object Success : UiStateLogin
     object Error : UiStateLogin
     object Loading : UiStateLogin
@@ -73,7 +72,7 @@ class ViewModelLogin : ViewModel(){
     fun goToLoginAfterRegister(){
         setShowAlertLogin(true) //registrazione completata tutto ok
         flush()
-        uiStateLogin=UiStateLogin.Login
+        uiStateLogin= UiStateLogin.Login
     }
 
     /**contatta api per salvare nuovo utente*/
@@ -87,7 +86,8 @@ class ViewModelLogin : ViewModel(){
             }
             catch (e: IOException) {
                 Log.d("ex","IOex")
-                UiStateRegister.Error }
+                UiStateRegister.Error
+            }
             catch (e: HttpException) {
                 Log.d("ex","HTTPex")
                 UiStateRegister.Error
@@ -119,7 +119,9 @@ class ViewModelLogin : ViewModel(){
                 }
 
             }
-            catch (e: IOException) { UiStateLogin.Error }
+            catch (e: IOException) {
+                UiStateLogin.Error
+            }
             catch (e: HttpException) {
                 if(e.code()==401){
                     Log.d("refreshToken","refreshToken 401")
@@ -127,7 +129,8 @@ class ViewModelLogin : ViewModel(){
                     UiStateLogin.Error
                 }
                 else
-                    UiStateLogin.Error }
+                    UiStateLogin.Error
+            }
         }
     }
 
@@ -152,7 +155,8 @@ class ViewModelLogin : ViewModel(){
                         UiStateAccount.Error
                     }
                     else
-                        UiStateAccount.Error }
+                        UiStateAccount.Error
+                }
             }
     }
 
@@ -165,12 +169,12 @@ class ViewModelLogin : ViewModel(){
     }
     /**Button (registrati) nella LoginScreen, chiama Registrazione*/
     fun register() {
-        uiStateLogin=UiStateLogin.Register
-        uiStateRegister=UiStateRegister.Loading
+        uiStateLogin= UiStateLogin.Register
+        uiStateRegister= UiStateRegister.Loading
     }
     /**Button (Ho gia un account) da Registrazione ritorna a LoginScreen*/
     fun setUistateLogin(){
-        uiStateLogin=UiStateLogin.Login
+        uiStateLogin= UiStateLogin.Login
     }
 
     /**gestisce la visualizzazione degli alert*/

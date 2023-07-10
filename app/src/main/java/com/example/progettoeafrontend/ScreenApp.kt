@@ -40,6 +40,9 @@ import com.example.progettoeafrontend.ui.MessageDetail
 import com.example.progettoeafrontend.ui.ProductDetail
 import com.example.progettoeafrontend.ui.Search
 import com.example.progettoeafrontend.ui.WriteMessage
+import com.example.progettoeafrontend.viewmodels.ViewModelLogin
+import com.example.progettoeafrontend.viewmodels.ViewModelProduct
+import com.example.progettoeafrontend.viewmodels.viewModelMessage
 
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken
 import com.google.gson.Gson
@@ -60,9 +63,9 @@ enum class ScreenApp(@StringRes val title:Int){
 @Composable
 fun screenApp() {
 
-    val viewModelProduct:ViewModelProduct = viewModel()
-    val viewModelMessage:viewModelMessage= viewModel()
-    val viewModelLogin:ViewModelLogin= viewModel()
+    val viewModelProduct: ViewModelProduct = viewModel()
+    val viewModelMessage: viewModelMessage = viewModel()
+    val viewModelLogin: ViewModelLogin = viewModel()
     val navController = rememberNavController()
     Scaffold(
         bottomBar = {

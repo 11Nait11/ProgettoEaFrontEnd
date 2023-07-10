@@ -19,7 +19,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -35,13 +34,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.progettoeafrontend.R
-import com.example.progettoeafrontend.UiStateAccount
-import com.example.progettoeafrontend.ViewModelLogin
+import com.example.progettoeafrontend.viewmodels.UiStateAccount
+import com.example.progettoeafrontend.viewmodels.ViewModelLogin
 import com.example.progettoeafrontend.model.User
 
 
 @Composable
-fun Account(uiState:UiStateAccount, viewModelLogin: ViewModelLogin) {
+fun Account(uiState: UiStateAccount, viewModelLogin: ViewModelLogin) {
 
 
     if (uiState == UiStateAccount.Loading || uiState == UiStateAccount.Error)

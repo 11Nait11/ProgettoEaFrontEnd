@@ -44,9 +44,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.progettoeafrontend.ViewModelProduct
+import com.example.progettoeafrontend.viewmodels.ViewModelProduct
 import com.example.progettoeafrontend.R
-import com.example.progettoeafrontend.UiStateProductDetail
+import com.example.progettoeafrontend.viewmodels.UiStateProductDetail
 import com.example.progettoeafrontend.model.Product
 import com.example.progettoeafrontend.ScreenApp
 

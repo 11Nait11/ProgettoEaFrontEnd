@@ -36,14 +36,14 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.progettoeafrontend.R
 import com.example.progettoeafrontend.ScreenApp
-import com.example.progettoeafrontend.UiStateMessage
+import com.example.progettoeafrontend.viewmodels.UiStateMessage
 import com.example.progettoeafrontend.model.Message
-import com.example.progettoeafrontend.viewModelMessage
+import com.example.progettoeafrontend.viewmodels.viewModelMessage
 import com.google.gson.Gson
 
 
 @Composable
-fun MessageList(uiState:UiStateMessage, viewModel: viewModelMessage, navController: NavController, modifier: Modifier = Modifier){
+fun MessageList(uiState: UiStateMessage, viewModel: viewModelMessage, navController: NavController, modifier: Modifier = Modifier){
 
     if(uiState== UiStateMessage.Loading || uiState== UiStateMessage.Error)
         viewModel.getMessages()

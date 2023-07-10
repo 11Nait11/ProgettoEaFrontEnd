@@ -23,8 +23,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.progettoeafrontend.UiStateRegister
-import com.example.progettoeafrontend.ViewModelLogin
+import com.example.progettoeafrontend.viewmodels.UiStateRegister
+import com.example.progettoeafrontend.viewmodels.ViewModelLogin
 
 
 /**raccoglie dati nuovo utente e invia al backEnd per salvare nel db*/

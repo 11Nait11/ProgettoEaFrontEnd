@@ -1,12 +1,10 @@
 package com.example.progettoeafrontend.ui
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -30,13 +28,13 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.progettoeafrontend.R
 import com.example.progettoeafrontend.ScreenApp
-import com.example.progettoeafrontend.UiStateSendMessage
-import com.example.progettoeafrontend.viewModelMessage
+import com.example.progettoeafrontend.viewmodels.UiStateSendMessage
+import com.example.progettoeafrontend.viewmodels.viewModelMessage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WriteMessage(
-    viewModelMessage:viewModelMessage,
+    viewModelMessage: viewModelMessage,
     navController: NavController,
     venditoreId: Long,
     venditoreNome: String

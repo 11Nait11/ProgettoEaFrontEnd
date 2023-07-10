@@ -2,13 +2,11 @@ package com.example.progettoeafrontend.ui
 
 
 import android.util.Base64
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -44,22 +42,22 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.progettoeafrontend.ViewModelProduct
+import com.example.progettoeafrontend.viewmodels.ViewModelProduct
 import com.example.progettoeafrontend.R
 
-import com.example.progettoeafrontend.UiStateProduct
+import com.example.progettoeafrontend.viewmodels.UiStateProduct
 import com.example.progettoeafrontend.ScreenApp
 import com.example.progettoeafrontend.model.Product
 
 
 /**Visualizza la lista di prodotti (se tutto è andato bene)*/
 @Composable
-fun Home(uiState:UiStateProduct, navController : NavController,
+fun Home(uiState: UiStateProduct, navController : NavController,
          viewModel: ViewModelProduct,
          modifier: Modifier = Modifier, )
 {
 
-    if(uiState==UiStateProduct.Loading || uiState==UiStateProduct.Error) {
+    if(uiState== UiStateProduct.Loading || uiState== UiStateProduct.Error) {
         viewModel.getProducts()
     }
 

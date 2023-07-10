@@ -1,7 +1,6 @@
 package com.example.progettoeafrontend.ui
 
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,9 +39,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.progettoeafrontend.R
-import com.example.progettoeafrontend.UiStateLogin
+import com.example.progettoeafrontend.viewmodels.UiStateLogin
 import com.example.progettoeafrontend.screenApp
-import com.example.progettoeafrontend.ViewModelLogin
+import com.example.progettoeafrontend.viewmodels.ViewModelLogin
 
 
 
@@ -71,7 +70,7 @@ fun ResultScreenLogin() { screenApp() }
 
 /**chiama la registrazione se viene cliccato il buttone registrati*/
 @Composable
-fun Register(viewModelLogin:ViewModelLogin){ registrazione(viewModelLogin) }
+fun Register(viewModelLogin: ViewModelLogin){ registrazione(viewModelLogin) }
 
 
 @Composable

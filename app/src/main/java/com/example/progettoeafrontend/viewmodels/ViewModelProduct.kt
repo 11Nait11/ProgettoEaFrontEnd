@@ -1,4 +1,4 @@
-package com.example.progettoeafrontend
+package com.example.progettoeafrontend.viewmodels
 
 import android.content.ContentResolver
 import android.net.Uri
@@ -10,6 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.example.progettoeafrontend.ScreenApp
 import com.example.progettoeafrontend.model.Image
 import com.example.progettoeafrontend.model.Product
 import com.example.progettoeafrontend.network.Service
@@ -77,14 +78,14 @@ class ViewModelProduct : ViewModel(){
 
     /**navigazione info prodotto */
     fun setUiStateProductDetail(product: Product){
-        uiStateProductDetail=UiStateProductDetail.Success(product)
+        uiStateProductDetail= UiStateProductDetail.Success(product)
     }
     fun setUiStateProductLoading(){
-        uiStateProduct=UiStateProduct.Loading
+        uiStateProduct= UiStateProduct.Loading
     }
     /**ricarica prodotto da backEnd*/
     fun refresh() {
-        uiStateProduct=UiStateProduct.Loading
+        uiStateProduct= UiStateProduct.Loading
         getProducts()
     }
 
@@ -94,7 +95,9 @@ class ViewModelProduct : ViewModel(){
             uiStateProduct = try {
                 val listResult = Service.retrofitService.getProducts()
                 UiStateProduct.Success(resultList = listResult)
-            } catch (e: IOException) { UiStateProduct.Error }
+            } catch (e: IOException) {
+                UiStateProduct.Error
+            }
             catch (e: HttpException) {
                 if(e.code()==401){
                     Log.d("refreshToken","refreshToken 401")
@@ -102,7 +105,8 @@ class ViewModelProduct : ViewModel(){
                     UiStateProduct.Error
                 }
                 else
-                    UiStateProduct.Error }
+                    UiStateProduct.Error
+            }
         }
     }
 
@@ -113,7 +117,9 @@ class ViewModelProduct : ViewModel(){
                     Service.retrofitService.deleteProduct(idProd)
                     UiStateProduct.Loading
                 }
-                catch (e: IOException) { UiStateProduct.Error }
+                catch (e: IOException) {
+                    UiStateProduct.Error
+                }
                 catch (e: HttpException) {
                     if(e.code()==401){
                         Log.d("refreshToken","refreshToken 401")
@@ -121,7 +127,8 @@ class ViewModelProduct : ViewModel(){
                         UiStateProduct.Error
                     }
                     else
-                        UiStateProduct.Error }
+                        UiStateProduct.Error
+                }
             }
         Log.d("DELETE", "Porodotto Cancellato " +idProd)
     }
@@ -145,7 +152,9 @@ class ViewModelProduct : ViewModel(){
                  isAlertShow=true
                  UiStateProductAdd.Success
 
-             } catch (e: IOException) { UiStateProductAdd.Error }
+             } catch (e: IOException) {
+                 UiStateProductAdd.Error
+             }
          }
      }
 
@@ -154,7 +163,7 @@ class ViewModelProduct : ViewModel(){
     /**se il prodotto e' stato salvato correttamente ritorno alla home*/
     fun saveProductSuccess(navController: NavHostController) {
         refresh()
-        uiStateProductAdd=UiStateProductAdd.Loading
+        uiStateProductAdd= UiStateProductAdd.Loading
         immagini=emptyList()
         nomeProdotto=""
         prezzo=""
@@ -182,18 +191,22 @@ class ViewModelProduct : ViewModel(){
             uiStateProduct = try {
                 val listResult = Service.retrofitService.getImages()
                 UiStateProduct.Success(resultList = listResult)
-            } catch (e: IOException) { UiStateProduct.Error }
+            } catch (e: IOException) {
+                UiStateProduct.Error
+            }
         }
     }
 
     /**get singolo prodotto forse non necessaria - da rivedere */
     fun getProductDetail(prodottoId:Long){
-        uiStateProductDetail=UiStateProductDetail.Loading
+        uiStateProductDetail= UiStateProductDetail.Loading
         viewModelScope.launch {
             uiStateProductDetail = try {
                 val result = Service.retrofitService.getProduct(prodottoId)
-                UiStateProductDetail.Success(result= result)
-            } catch (e: IOException) { UiStateProductDetail.Error }
+                UiStateProductDetail.Success(result = result)
+            } catch (e: IOException) {
+                UiStateProductDetail.Error
+            }
         }
 
     }
